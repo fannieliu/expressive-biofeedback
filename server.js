@@ -26,6 +26,25 @@ var betaarr_sec = [];
 var gammaarr = [];
 var gammaarr_sec = [];
 
+var raweegarr = [];
+var accarr = [];
+
+var rawfft0 = [];
+var rawfft1 = [];
+var rawfft2 = [];
+var rawfft3 = [];
+
+var lowfreqabs = [];
+var deltaabs = [];
+var thetaabs = [];
+var alphaabs = [];
+var betaabs = [];
+var gammaabs = [];
+
+var concentration = [];
+var mellow = [];
+
+
 io.on('connection', function(socket) {
     console.log('connected');
 
@@ -140,6 +159,77 @@ io.on('connection', function(socket) {
                 socket.emit('gamma_relative', averageChannelData(data));
             }
         });
+
+        muse.on('/muse/elements/horseshoe', function(data){
+            socket.emit('headband_status', data.values);
+        });
+
+        // save additional information that might be useful
+        muse.on('/muse/eeg', function(data) {
+            raweegarr.push(data.values);
+        });
+
+        muse.on('/muse/acc', function(data) {
+            accarr.push(data.values);
+        });
+
+        muse.on('/muse/elements/rawfft0', function(data) {
+            rawfft0.push(data.values);
+        });
+
+        muse.on('/muse/elements/rawfft1', function(data) {
+            rawfft1.push(data.values);
+        });
+
+        muse.on('/muse/elements/rawfft2', function(data) {
+            rawfft2.push(data.values);
+        });
+
+        muse.on('/muse/elements/rawfft3', function(data) {
+            rawfft3.push(data.values);
+        });
+
+        muse.on('/muse/elements/low_freqs_absolute', function(data) {
+            lowfreqabs.push(data.values);
+        });
+
+        muse.on('/muse/elements/delta_absolute', function(data) {
+            deltaabs.push(data.values);
+        });
+
+        muse.on('/muse/elements/theta_absolute', function(data) {
+            thetaabs.push(data.values);
+        });
+
+        muse.on('/muse/elements/alpha_absolute', function(data) {
+            alphaabs.push(data.values);
+        });
+
+        muse.on('/muse/elements/beta_absolute', function(data) {
+            betaabs.push(data.values);
+        });
+
+        muse.on('/muse/elements/gamma_absolute', function(data) {
+            gammaabs.push(data.values);
+        });
+
+        muse.on('/muse/elements/experimental/concentration', function(data) {
+            concentration.push(data.values);
+        });
+
+        muse.on('/muse/elements/experimental/mellow', function(data) {
+            mellow.push(data.values);
+        });
+    });
+
+    socket.on('recordtime', function() {
+        var delimiter = ['start', 'start', 'start', 'start']
+        addDelimiterToAllArrays(delimiter);
+    });
+
+    socket.on('recordended', function() {
+        var delimiter = ['end', 'end', 'end', 'end']
+        addDelimiterToAllArrays(delimiter);
     });
 
     socket.on('disconnectmuse', function() {
@@ -157,6 +247,22 @@ io.on('connection', function(socket) {
         downloadData(alphaarr_sec, 'alpha_sec');
         downloadData(betaarr_sec, 'beta_sec');
         downloadData(gammaarr_sec, 'gamma_sec');
+
+        // save additional information
+        downloadData(raweegarr, 'raweeg');
+        downloadData(accarr, 'acc');
+        downloadData(rawfft0, 'rawfft0');
+        downloadData(rawfft1, 'rawfft1');
+        downloadData(rawfft2, 'rawfft2');
+        downloadData(rawfft3, 'rawfft3');
+        downloadData(lowfreqabs, 'low_freqs_absolute');
+        downloadData(deltaabs, 'delta_absolute');
+        downloadData(thetaabs, 'theta_absolute');
+        downloadData(alphaabs, 'alpha_absolute');
+        downloadData(betaabs, 'beta_absolute');
+        downloadData(gammaabs, 'gamma_absolute');
+        downloadData(concentration, 'concentration');
+        downloadData(mellow, 'mellow');
     });
 });
 
@@ -166,24 +272,61 @@ io.on('connection', function(socket) {
 function averageChannelData(data) {
     var sum = 0;
     var numValidChannels = 0;
+    var leftback = -1;
+    var leftfront = -1;
+    var rightfront = -1;
+    var rightback = -1;
+    var changed = false;
     if (!isNaN(data.values[0])) {
         sum += data.values[0];
         numValidChannels++;
+        leftback = 1;
     }
     if (!isNaN(data.values[1])) {
         sum += data.values[1];
         numValidChannels++;
+        leftfront = 1;
     }
     if (!isNaN(data.values[2])) {
         sum += data.values[2];
         numValidChannels++;
+        rightfront = 1;
     }
     if (!isNaN(data.values[3])) {
         sum += data.values[3];
         numValidChannels++;
+        rightback = 1;
     }
     var average = sum / numValidChannels;
     return average;
+}
+
+function addDelimiterToAllArrays(delimiter) {
+    deltaarr.push(delimiter);
+    deltaarr_sec.push(delimiter);
+    alphaarr.push(delimiter);
+    alphaarr_sec.push(delimiter);
+    thetaarr.push(delimiter);
+    thetaarr_sec.push(delimiter);
+    betaarr.push(delimiter);
+    betaarr_sec.push(delimiter);
+    gammaarr.push(delimiter);
+    gammaarr_sec.push(delimiter);
+
+    raweegarr.push(delimiter)
+    accarr.push(delimiter);
+    rawfft0.push(delimiter);
+    rawfft1.push(delimiter);
+    rawfft2.push(delimiter);
+    rawfft3.push(delimiter);
+    lowfreqabs.push(delimiter);
+    deltaabs.push(delimiter);
+    thetaabs.push(delimiter);
+    alphaabs.push(delimiter);
+    betaabs.push(delimiter);
+    gammaabs.push(delimiter);
+    concentration.push(delimiter);
+    mellow.push(delimiter);
 }
 
 function checkTime(currentTime, lastTime) {

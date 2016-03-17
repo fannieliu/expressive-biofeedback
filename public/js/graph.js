@@ -1,6 +1,6 @@
 // interactions with the graph
 
-$("#graphdiv ul li:not(.active)")
+$(".graphdiv ul li:not(.active)")
   // change any non-active opacity to 0.7
   .css({ opacity: 0.4 })
   // now bind to anon non-active items

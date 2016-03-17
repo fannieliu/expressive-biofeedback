@@ -13,18 +13,65 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="scripts/smoothie/smoothie.js"></script>
-<script src="js/eeg.js"></script>
+<script src="js/main.js"></script>
 </head>
 <body>
-    <div id="container">
-        <div id="button">
-            <button onclick="connectToMuse()">Connect to Muse</button>
-            <button onclick="disconnectFromMuse()">Disconnect from Muse</button>
-            <span id="musestatus"></span>
+    <header>
+        <div id="mode" class="header-item">
+            Mode:
+            <span id="record-button" onclick="switchMode(0)" class="clickable">Record</span>
+            <span id="replay-button" style="opacity: 0.5" onclick="switchMode(1)" class="clickable">Replay</span>
         </div>
-        <div id="graphdiv">
+        <div id="record-menu">
+            <div id="muse-actions" class="header-item">
+                Muse:
+                <span onclick="connectToMuse()" class="clickable">Connect</span>
+                <span onclick="disconnectFromMuse()" class="clickable">Disconnect</span>
+                <span id="connect-message"></span>
+            </div>
+            <div id="muse-status" class="header-item">
+                Muse Status:
+                <span id="leftback" class="channelstatus">LB</span>
+                <span id="leftfront" class="channelstatus">LF</span>
+                <span id="rightfront" class="channelstatus">RF</span>
+                <span id="rightback" class="channelstatus">RB</span>
+            </div>
+            <div id="record-audio" class="header-item">
+                <audio id="record-audio-player" onplay="recordDataWithAudio()" controls>
+                    <source src="audio/darkknight.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+        </div>
+        <div id="replay-menu">
+            <div id="upload-csv" class="header-item">
+                <div class="upload-item">
+                    Delta: <input type="file" id="deltafile" />
+                </div>
+                <div class="upload-item">
+                    Theta: <input type="file" id="thetafile" />
+                </div>
+                <div class="upload-item">
+                    Alpha: <input type="file" id="alphafile" />
+                </div>
+                <div class="upload-item">
+                    Beta: <input type="file" id="betafile" />
+                </div>
+                <div class="upload-item">
+                    Gamma: <input type="file" id="gammafile" />
+                </div>
+            </div>
+            <div id="replay-audio" class="header-item">
+                <span onclick="replayDataWithAudio()" class="clickable">Replay with Audio</span>
+                <audio id="replay-audio-player" controls>
+                    <source src="audio/darkknight.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <div class="graph-container">
             <canvas id="graph" width="900" height="480"></canvas>
-            <ul id="graphlabels">
+            <ul class="graph-labels">
                 <li id="delta" style="color: rgba(15,198,0,1);">Delta</li>
                 <li id="theta" style="color: rgba(218,198,0,1);">Theta</li>
                 <li id="alpha" style="color: rgba(246,130,0,1);">Alpha</li>
@@ -32,12 +79,13 @@
                 <li id="gamma" style="color: rgba(3,55,244,1);">Gamma</li>
             </ul>
             <!-- No descriptions to start with
-            <div id="loggraphdescription">
+            <div id="graph-description">
             </div>
             -->
         </div>
-
         <script src="js/graph.js"></script>
+        <script src="js/record.js"></script>
+        <script src="js/replay.js"></script>
     </div>
 </body>
 </html>
