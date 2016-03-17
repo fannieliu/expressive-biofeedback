@@ -106,7 +106,7 @@ function createGraph() {
     });
     smoothie.streamTo(document.getElementById('graph'), 1000);
 
-    $('.graphlabels').css("display", "inline-block");
+    $('.graph-labels').css("display", "inline-block");
 
     // data
     deltaline = new TimeSeries();
