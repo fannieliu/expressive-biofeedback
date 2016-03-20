@@ -6,8 +6,9 @@ function connectToMuse() {
     socket.emit('connectmuse');
 
     socket.on('muse_connected', function() {
+        // TODO: update record for all viz
         startGraphing('graph');
-        $('#headbandstatus').css("display", "block");
+        $('#muse-status').css("display", "inline-block");
         $('#connect-message').text('Connected! Now recording.');
     });
 
@@ -21,7 +22,7 @@ function connectToMuse() {
 
     var leftback = -1;
     var leftfront = -1;
-    var rightfront = -1;
+    var rightfront = -1
     var rightback = -1;
     socket.on('headband_status', function(data) {
         // good: 1, ok: 2, bad: >= 3

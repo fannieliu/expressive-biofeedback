@@ -14,7 +14,7 @@ header {
     margin: auto;
     margin-left: 30px;
     margin-top: 15px;
-    width: 1100px;
+    width: 1200px;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -26,6 +26,7 @@ header {
     text-decoration: none;
     border: none;
     cursor: pointer;
+    color: #258DB0;
 }
 
 /*********** HEADER ***********/
@@ -34,6 +35,18 @@ header {
     display: inline-block;
     margin-top: 5px;
     vertical-align: middle;
+}
+
+.mode-button {
+    opacity: 0.5;
+}
+
+.mode-button:hover {
+    opacity: 1;
+}
+
+.mode-button-active {
+    opacity: 1;
 }
 
 #record-menu {
@@ -65,37 +78,35 @@ audio {
     width: 250px;
 }
 
-/*********** GRAPH ***********/
-
-.graph-container {
-    padding: 10px;
-    color: #eee;
+/*********** VIZ MENU **********/
+#viz-menu {
+    background-color: #eee;
+    height: 30px;
 }
 
-.graph-container ul {
-    list-style-type: none;
-    margin-left: -20px;
+#viz-menu-items {
+    padding-top: 4px;
 }
 
-.graph-container li {
+.viz-menu-item {
+    margin-left: 20px;
+}
+
+.viz-menu-clickable {
+    opacity: 0.5;
+}
+
+.viz-menu-clickable:hover {
+    opacity: 1;
+}
+
+.viz-menu-clickable {
     cursor: pointer;
+    color: #258DB0;
 }
 
-#graph {
-    display: inline-block;
-}
-
-.graph-labels {
-    display: none;
-    vertical-align: top;
-}
-
-#graph-description {
-    margin-top: 10px;
-    display: inline-block;
-    width: 150px;
-    vertical-align: top;
-    margin-left: 10px;
+.viz-menu-active {
+    opacity: 1;
 }
 
 /*********** MUSE STATUS ***********/
@@ -109,4 +120,94 @@ audio {
     color: white;
     border-radius: 5px;
     background-color: green;
+}
+
+/*********** GRAPH ***********/
+
+#graph-container {
+    padding: 10px;
+    color: #eee;
+}
+
+#graph-container ul {
+    list-style-type: none;
+    margin-left: -20px;
+}
+
+#graph-container li {
+    cursor: pointer;
+}
+
+#graph {
+    display: inline-block;
+}
+
+.graph-labels {
+    display: none;
+    vertical-align: top;
+}
+
+#graph-description {
+    display: inline-block;
+    width: 100px;
+    vertical-align: top;
+    margin-left: 15px;
+}
+
+/*********** EMOJI ***********/
+.emoji {
+    width: 175px;
+    vertical-align: bottom;
+    margin-right: 40px;
+    opacity: 0;
+}
+
+/*********** COLORS ***********/
+.gradient-blue{
+    background-color:#fff;
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#0337f4), to(#fff));/* Safari 4-5, Chrome 1-9 */
+    background: -webkit-radial-gradient(circle, #0337f4, #fff);/* Safari 5.1+, Chrome 10+ */
+    background: -moz-radial-gradient(circle, #0337f4, #fff);/* Firefox 3.6+ */
+    background: -ms-radial-gradient(circle, #0337f4, #fff);/* IE 10 */
+}
+.gradient-green{
+    background-color:#fff;
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#0fc600), to(#fff));/* Safari 4-5, Chrome 1-9 */
+    background: -webkit-radial-gradient(circle, #0fc600, #fff);/* Safari 5.1+, Chrome 10+ */
+    background: -moz-radial-gradient(circle, #0fc600, #fff);/* Firefox 3.6+ */
+    background: -ms-radial-gradient(circle, #0fc600, #fff);/* IE 10 */
+}
+
+.gradient-yellow{
+    background-color:#fff;
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#dac600), to(#fff));/* Safari 4-5, Chrome 1-9 */
+    background: -webkit-radial-gradient(circle, #dac600, #fff);/* Safari 5.1+, Chrome 10+ */
+    background: -moz-radial-gradient(circle, #dac600, #fff);/* Firefox 3.6+ */
+    background: -ms-radial-gradient(circle, #dac600, #fff);/* IE 10 */
+}
+
+.gradient-orange{
+    background-color:#fff;
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#f68200), to(#fff));/* Safari 4-5, Chrome 1-9 */
+    background: -webkit-radial-gradient(circle, #f68200, #fff);/* Safari 5.1+, Chrome 10+ */
+    background: -moz-radial-gradient(circle, #f68200, #fff);/* Firefox 3.6+ */
+    background: -ms-radial-gradient(circle, #f68200, #fff);/* IE 10 */
+}
+
+.gradient-red{
+    background-color:#fff;
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#f72b00), to(#fff));/* Safari 4-5, Chrome 1-9 */
+    background: -webkit-radial-gradient(circle, #f72b00, #fff);/* Safari 5.1+, Chrome 10+ */
+    background: -moz-radial-gradient(circle, #f72b00, #fff);/* Firefox 3.6+ */
+    background: -ms-radial-gradient(circle, #f72b00, #fff);/* IE 10 */
+}
+
+.color {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0;
 }

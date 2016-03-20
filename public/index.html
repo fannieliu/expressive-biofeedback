@@ -13,14 +13,14 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="scripts/smoothie/smoothie.js"></script>
-<script src="js/main.js"></script>
 </head>
 <body>
+    <!--menus-->
     <header>
         <div id="mode" class="header-item">
             Mode:
-            <span id="record-button" onclick="switchMode(0)" class="clickable">Record</span>
-            <span id="replay-button" style="opacity: 0.5" onclick="switchMode(1)" class="clickable">Replay</span>
+            <span id="record-button" class="mode-button mode-button-active clickable">Record</span>
+            <span id="replay-button" class="mode-button clickable">Replay</span>
         </div>
         <div id="record-menu">
             <div id="muse-actions" class="header-item">
@@ -68,8 +68,19 @@
             </div>
         </div>
     </header>
+    <div id="viz-menu">
+        <div id="viz-menu-items">
+            <span class="viz-menu-item" style="opacity: 0.7">Visualization:</span>
+            <span id ="viz-menu-lines" class="viz-menu-item viz-menu-clickable viz-menu-active">Lines</span>
+            <span id="viz-menu-emoji" class="viz-menu-item viz-menu-clickable">Emoji</span>
+            <span id="viz-menu-swirl" class="viz-menu-item viz-menu-clickable">Swirl</span>
+            <span id="viz-menu-colors" class="viz-menu-item viz-menu-clickable">Colors</span>
+            </div>
+        </div>
+    </div>
+    <!--visualizations-->
     <div id="container">
-        <div class="graph-container">
+        <div id="graph-container">
             <canvas id="graph" width="900" height="480"></canvas>
             <ul class="graph-labels">
                 <li id="delta" style="color: rgba(15,198,0,1);">Delta</li>
@@ -78,14 +89,30 @@
                 <li id="beta" style="color: rgba(247,43,0,1);">Beta</li>
                 <li id="gamma" style="color: rgba(3,55,244,1);">Gamma</li>
             </ul>
-            <!-- No descriptions to start with
             <div id="graph-description">
             </div>
-            -->
         </div>
-        <script src="js/graph.js"></script>
-        <script src="js/record.js"></script>
-        <script src="js/replay.js"></script>
+        <div id="emoji-container" style="display: none">
+            <img class="emoji" id="delta-emoji" src="img/delta.svg">
+            <img class="emoji" id="theta-emoji"  src="img/theta.svg">
+            <img class="emoji" id="alpha-emoji" src="img/alpha.svg">
+            <img class="emoji" id="beta-emoji" src="img/beta.svg">
+            <img class="emoji" id="gamma-emoji" src="img/gamma.svg">
+        </div>
+        <div id="swirl-container" style="display: none">
+            SWIRL
+        </div>
+        <div id="colors-container" style="display: none">
+            <div id="delta-color" class="gradient-green color"></div>
+            <div id="theta-color" class="gradient-yellow color"></div>
+            <div id="alpha-color" class="gradient-orange color"></div>
+            <div id="beta-color" class="gradient-red color"></div>
+            <div id="gamma-color" class="gradient-blue color"></div>
+        </div>
     </div>
+    <script src="js/main.js"></script>
+    <script src="js/graph.js"></script>
+    <script src="js/record.js"></script>
+    <script src="js/replay.js"></script>
 </body>
 </html>
