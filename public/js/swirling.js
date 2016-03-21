@@ -109,7 +109,7 @@ function doSwirling() {
 function updateSwirl(config, newDelta, newTheta, newAlpha, newBeta, newGamma){
   config.count = newBeta*350+150;
   config.rotationVelMax = .2+.8*(newGamma);
-  config.distanceJitterMax = max(0,(newAlpha)*15-1);
+  config.distanceJitterMax = Math.max(0,(1-newAlpha)*15-1);
   config.hueMax = 30+(600*newTheta);
   config.hueIncrement = 1+4*newTheta;
   config.saturationMax = 90-(newDelta*50);
