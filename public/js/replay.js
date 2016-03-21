@@ -116,6 +116,9 @@ function startReplayViz() {
     var index = 0;
     var max = getMaxAllArr();
     var shift = 1 - max;
+    var config = getConfig();
+    var swirl = new CanvasSwirl(
+        document.getElementById('swirl_surface'), config);
 
     // stuff for light
     socket = io.connect();
@@ -134,6 +137,7 @@ function startReplayViz() {
             // graph
             replayGraph(index);
             replayEmoji(index, shift);
+            replaySwirl(swirl, index);
             replayColors(index, shift);
             replayLight(index);
         }
@@ -161,6 +165,12 @@ function replayEmoji(index, shift) {
     $('#alpha-emoji').animate({opacity: alpha_shift});
     $('#beta-emoji').animate({opacity: beta_shift});
     $('#gamma-emoji').animate({opacity: gamma_shift});
+}
+
+function replaySwirl(my_swirl, index){
+  var new_config = getConfig();
+  updateSwirl(new_config, deltaarr_replay[index], thetaarr_replay[index], alphaarr_replay[index], betaarr_replay[index], gammaarr_replay[index]);
+  my_swirl.applyConfig(new_config);
 }
 
 function replayColors(index, shift) {

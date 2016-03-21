@@ -13,6 +13,7 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="scripts/smoothie/smoothie.js"></script>
+<script src="js/swirl_0.8_min.js"></script>
 </head>
 <body>
     <!--menus-->
@@ -100,7 +101,7 @@
             <img class="emoji" id="gamma-emoji" src="img/gamma.svg">
         </div>
         <div id="swirl-container" style="display: none">
-            SWIRL
+            <canvas id ="swirl_surface" width = '700' height = '700'>
         </div>
         <div id="colors-container" style="display: none">
             <div id="delta-color" class="gradient-green color"></div>
@@ -112,6 +113,7 @@
     </div>
     <script src="js/main.js"></script>
     <script src="js/graph.js"></script>
+    <script src="js/swirling.js"></script>
     <script src="js/record.js"></script>
     <script src="js/replay.js"></script>
 </body>
