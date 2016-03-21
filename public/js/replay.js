@@ -116,6 +116,15 @@ function startReplayViz() {
     var index = 0;
     var max = getMaxAllArr();
     var shift = 1 - max;
+
+    // stuff for light
+    socket = io.connect();
+    socket.emit('openport');
+    var replayaud = document.getElementById('replay-audio-player');
+    replayaud.onended = function() {
+        socket.emit('closeport');
+    }
+
     setInterval(function() {
         if (deltaarr_replay[index] == 'start,start,start,start') {
             startAudio();
@@ -126,6 +135,7 @@ function startReplayViz() {
             replayGraph(index);
             replayEmoji(index, shift);
             replayColors(index, shift);
+            replayLight(index);
         }
         index++;
     }, 1000);
@@ -165,6 +175,36 @@ function replayColors(index, shift) {
     $('#alpha-color').animate({opacity: alpha_shift});
     $('#beta-color').animate({opacity: beta_shift});
     $('#gamma-color').animate({opacity: gamma_shift});
+}
+
+
+function replayLight(index) {
+    // write 'd, t, a, b, g' for which light to display
+    var delta_float = parseFloat(deltaarr_replay[index]);
+    var theta_float = parseFloat(thetaarr_replay[index]);
+    var alpha_float = parseFloat(alphaarr_replay[index]);
+    var beta_float = parseFloat(betaarr_replay[index]);
+    var gamma_float = parseFloat(gammaarr_replay[index]);
+
+    var sendData = 'd';
+    var max = delta_float;
+    if (theta_float > max) {
+        max = theta_float;
+        sendData = 't';
+    }
+    if (alpha_float > max) {
+        max = alpha_float;
+        sendData = 'a';
+    }
+    if (beta_float > max) {
+        max = beta_float;
+        sendData = 'b';
+    }
+    if (gamma_float > max) {
+        max = gamma_float;
+        sendData = 'g'
+    }
+    socket.emit('writeserial', sendData);
 }
 
 function getMaxArr(arr) {

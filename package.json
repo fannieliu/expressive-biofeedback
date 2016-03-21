@@ -9,7 +9,8 @@
     "socket.io": "^1.3.7",
     "node-muse": "latest",
     "smoothie": "latest",
-    "fast-csv": "latest"
+    "fast-csv": "latest",
+    "serialport": "latest"
   },
   "engines": {
     "node": "4.1.1"

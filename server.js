@@ -4,6 +4,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var csv = require('fast-csv');
+var SerialPort = require("serialport").SerialPort;
+var portName = 'COM8';
 
 app.use('/scripts', express.static(__dirname + '/node_modules/'));
 
@@ -44,9 +46,21 @@ var gammaabs = [];
 var concentration = [];
 var mellow = [];
 
-
 io.on('connection', function(socket) {
     console.log('connected');
+
+    // serial listener stuff for lights
+    socket.on('openport', function() {
+        serialListener();
+    });
+    socket.on('closeport', function() {
+        serialPort.close();
+    });
+
+    socket.on('writeserial', function(data) {
+        console.log('writing ' + data);
+        serialPort.write(data + 'E');
+    });
 
     socket.on('connectmuse', function() {
         // send fake data
@@ -346,6 +360,21 @@ function downloadData(data, filename) {
        .on("finish", function(){
            console.log("done!");
        });
+}
+
+function serialListener() {
+    serialPort = new SerialPort('\\\\.\\COM8', {
+        baudrate: 9600,
+        // defaults for Arduino serial communication
+        dataBits: 8,
+        parity: 'none',
+        stopBits: 1,
+        flowControl: false
+    });
+
+    serialPort.on('open', function () {
+      console.log('open serial communication');
+    });
 }
 
 http.listen(process.env.PORT || 3000, function(){
