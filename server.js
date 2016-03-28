@@ -50,7 +50,7 @@ io.on('connection', function(socket) {
     console.log('connected');
 
     // serial listener stuff for lights
-    socket.on('openport', function() {
+    /*socket.on('openport', function() {
         serialListener();
     });
     socket.on('closeport', function() {
@@ -59,7 +59,7 @@ io.on('connection', function(socket) {
 
     socket.on('writeserial', function(data) {
         serialPort.write(data + 'E');
-    });
+    });*/
 
     socket.on('connectmuse', function() {
         // send fake data

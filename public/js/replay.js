@@ -93,7 +93,7 @@ function startReplayViz() {
             replayEmoji(delta_float+shift, theta_float+shift, alpha_float+shift, beta_float+shift, gamma_float+shift);
             replaySwirl(swirl, delta_float, theta_float, alpha_float, beta_float, gamma_float);
             replayColors(delta_float+shift, theta_float+shift, alpha_float+shift, beta_float+shift, gamma_float+shift);
-            replayLight(index);
+            // replayLight(index);
         }
         index++;
     }, 1000);
