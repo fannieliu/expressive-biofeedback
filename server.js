@@ -58,7 +58,6 @@ io.on('connection', function(socket) {
     });
 
     socket.on('writeserial', function(data) {
-        console.log('writing ' + data);
         serialPort.write(data + 'E');
     });
 
@@ -363,7 +362,7 @@ function downloadData(data, filename) {
 }
 
 function serialListener() {
-    serialPort = new SerialPort('\\\\.\\COM8', {
+    serialPort = new SerialPort('/dev/cu.usbmodem1421', {
         baudrate: 9600,
         // defaults for Arduino serial communication
         dataBits: 8,

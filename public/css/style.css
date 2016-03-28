@@ -11,11 +11,10 @@ header {
 }
 
 #container {
-    margin: auto;
-    margin-left: 30px;
-    margin-top: 15px;
-    width: 1200px;
+    margin: 0 auto;
+    width: 1400px;
     font-family: 'Roboto', sans-serif;
+    text-align: center;
 }
 
 .clickable {
@@ -68,10 +67,8 @@ header {
     margin-top: 10px;
 }
 
-#replay-audio-player {
-    opacity: 0;
-    width: 0;
-    height: 0;
+#replay-audio {
+    margin-top: 10px;
 }
 
 audio {
@@ -125,6 +122,7 @@ audio {
 /*********** GRAPH ***********/
 
 #graph-container {
+    margin-top: 100px;
     padding: 10px;
     color: #eee;
 }
@@ -156,13 +154,46 @@ audio {
 
 /*********** EMOJI ***********/
 .emoji {
-    width: 175px;
+    height: 400px;
     vertical-align: bottom;
-    margin-right: 40px;
+    margin-right: 10px;
+    margin-left: 10px;
     opacity: 0;
 }
 
+#emoji-container {
+    width: 85%;
+    margin-top: 160px;
+}
+
+/*********** EMOJI ***********/
+#swirl-container {
+    margin-top: 80px;
+}
+
 /*********** COLORS ***********/
+/*
+ * pale blue: rgba(128, 201, 232, 1) or #80C9E8
+ * olive green: rgba(141, 186, 106, 1) #8DBA6A
+ * gold: rgba(218, 198, 0, 1) #dac600
+ */
+
+.gradient-pale-blue{
+    background-color:#fff;
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#80C9E8), to(#fff));/* Safari 4-5, Chrome 1-9 */
+    background: -webkit-radial-gradient(circle, #80C9E8, #fff);/* Safari 5.1+, Chrome 10+ */
+    background: -moz-radial-gradient(circle, #80C9E8, #fff);/* Firefox 3.6+ */
+    background: -ms-radial-gradient(circle, #80C9E8, #fff);/* IE 10 */
+}
+
+.gradient-olive-green{
+    background-color:#fff;
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#6DA662), to(#fff));/* Safari 4-5, Chrome 1-9 */
+    background: -webkit-radial-gradient(circle, #6DA662, #fff);/* Safari 5.1+, Chrome 10+ */
+    background: -moz-radial-gradient(circle, #6DA662, #fff);/* Firefox 3.6+ */
+    background: -ms-radial-gradient(circle, #6DA662, #fff);/* IE 10 */
+}
+
 .gradient-blue{
     background-color:#fff;
     background: -webkit-gradient(radial, center center, 0, center center, 460, from(#0337f4), to(#fff));/* Safari 4-5, Chrome 1-9 */

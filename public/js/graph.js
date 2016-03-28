@@ -4,23 +4,23 @@ var linegraph;
 
 var linemap = {
     'delta': {
-        'normal': 'rgba(15,198,0,1)',
-        'fade': 'rgba(15,198,0,0.20)',
+        'normal': 'rgba(141,186,106,1)',
+        'fade': 'rgba(141,186,106,0.4)',
         'description': 'Delta waves are associated with deep sleep.'
     },
     'theta': {
-        'normal': 'rgba(218,198,0,1)',
-        'fade': 'rgba(218,198,0,0.20)',
+        'normal': 'rgba(194,169,262,1)',
+        'fade': 'rgba(194,169,262,0.4)',
         'description': 'Theta waves are associated with daydreaming and meditation.'
     },
     'alpha': {
-        'normal': 'rgba(246,130,0,1)',
-        'fade': 'rgba(246,130,0,0.20)',
+        'normal': 'rgba(128,201,232,1)',
+        'fade': 'rgba(128,201,232,0.4)',
         'description': 'Alpha waves are associated with relaxation and disengagement.'
     },
     'beta': {
-        'normal': 'rgba(247,43,0,1)',
-        'fade': 'rgba(247,43,0,0.20)',
+        'normal': 'rgba(218,198,0,1)',
+        'fade': 'rgba(218,198,0,0.4)',
         'description': 'Beta waves are associated with focused concentration and active thinking.'
     },
     'gamma': {
@@ -55,29 +55,42 @@ function toggleFade(line, linetype, fade) {
 }
 
 function removeAllButOneLine(lineToStay) {
+    console.log(lineToStay);
     if (lineToStay != 'delta') {
         toggleFade(deltaline, 'delta', 'fade')
+        $('#delta').animate({ opacity: 0.6 });
+    } else {
+        toggleFade(deltaline, 'delta', 'normal')
+        $('#delta').animate({ opacity: 1 });
     }
     if (lineToStay != 'theta') {
-        toggleFade(thetaline, 'theta', 'fade')
+        // toggleFade(thetaline, 'theta', 'fade')
     }
     if (lineToStay != 'alpha') {
         toggleFade(alphaline, 'alpha', 'fade')
+        $('#alpha').animate({ opacity: 0.6 });
+    } else {
+        toggleFade(alphaline, 'alpha', 'normal')
+        $('#alpha').animate({ opacity: 1 });
     }
     if (lineToStay != 'beta') {
         toggleFade(betaline, 'beta', 'fade')
+        $('#beta').animate({ opacity: 0.6 });
+    } else {
+        toggleFade(betaline, 'beta', 'normal')
+        $('#beta').animate({ opacity: 1 });
     }
     if (lineToStay != 'gamma') {
-        toggleFade(gammaline, 'gamma', 'fade')
+        // toggleFade(gammaline, 'gamma', 'fade')
     }
 }
 
 function addAllLines() {
     toggleFade(deltaline, 'delta', 'normal');
-    toggleFade(thetaline, 'theta', 'normal');
+    // toggleFade(thetaline, 'theta', 'normal');
     toggleFade(alphaline, 'alpha', 'normal');
     toggleFade(betaline, 'beta', 'normal');
-    toggleFade(gammaline, 'gamma', 'normal');
+    // toggleFade(gammaline, 'gamma', 'normal');
 }
 
 function createGraph() {
@@ -86,7 +99,7 @@ function createGraph() {
         minValue: 0,
         grid: {
             fillStyle:'rgba(0,0,0,0)',
-            strokeStyle:'#79b133',
+            strokeStyle:'rgba(170,170,170,0.85)',
             verticalSections: 10
         }
     });
@@ -99,7 +112,7 @@ function createGraph() {
     addLine(smoothie, deltaline, 'delta');
 
     thetaline = new TimeSeries();
-    addLine(smoothie, thetaline, 'theta');
+    // addLine(smoothie, thetaline, 'theta');
 
     alphaline = new TimeSeries();
     addLine(smoothie, alphaline, 'alpha');
@@ -108,7 +121,7 @@ function createGraph() {
     addLine(smoothie, betaline, 'beta');
 
     gammaline = new TimeSeries();
-    addLine(smoothie, gammaline, 'gamma');
+    // addLine(smoothie, gammaline, 'gamma');
 
     deltaarr = [];
     thetaarr = [];
@@ -125,16 +138,16 @@ function addData(data, line, dataarr) {
 }
 
 $('#graph-container ul li:not(.active)')
-  .css({ opacity: 0.4 })
-  // now bind to anon non-active items
-  .hover(function() {
-      $(this).animate({ opacity: 1 });
-      var graphid = $(this).attr('id');
-      $('#graph-description').text(linemap[graphid]['description']).css('color', linemap[graphid]['normal']);
+    .css({ opacity: 0.5 })
+    // now bind to anon non-active items
+    .hover(function() {
+        $(this).animate({ opacity: 1 });
+        var graphid = $(this).attr('id');
+        $('#graph-description').text(linemap[graphid]['description']).css('color', linemap[graphid]['normal']);
     }, function() {
-      $(this).animate({ opacity: 0.4 });
-     $('#graph-description').text('');
-  });
+        $(this).animate({ opacity: 0.5 });
+        $('#graph-description').text('');
+    });
 
 $('li').hover(function() {
     $(this).toggleClass('active');

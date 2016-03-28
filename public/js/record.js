@@ -7,8 +7,9 @@ function connectToMuse() {
 
     socket.on('muse_connected', function() {
         // TODO: update record for all viz
-        startGraphing('graph');
-        $('#muse-status').css("display", "inline-block");
+        startGraphing();
+        startSwirl();
+        $('#muse-status').css('display', 'inline-block');
         $('#connect-message').text('Connected! Now recording.');
     });
 
@@ -20,44 +21,11 @@ function connectToMuse() {
         $('#connect-message').text('You were disconnected!');
     })
 
-    var leftback = -1;
-    var leftfront = -1;
-    var rightfront = -1
-    var rightback = -1;
     socket.on('headband_status', function(data) {
-        // good: 1, ok: 2, bad: >= 3
-        leftback = data[0];
-        if (leftback == 1) {
-            $('#leftback').css("background-color", "rgba(15,198,0,1)");
-        } else if (leftback == 2) {
-            $('#leftback').css("background-color", "rgba(218,198,0,1)");
-        } else {
-            $('#leftback').css("background-color", "red");
-        }
-        leftfront = data[1];
-        if (leftfront == 1) {
-            $('#leftfront').css("background-color", "rgba(15,198,0,1)");
-        } else if (leftfront == 2) {
-            $('#leftfront').css("background-color", "rgba(218,198,0,1)");
-        } else {
-            $('#leftfront').css("background-color", "red");
-        }
-        rightfront = data[2];
-        if (rightfront == 1) {
-            $('#rightfront').css("background-color", "rgba(15,198,0,1)");
-        } else if (rightfront == 2) {
-            $('#rightfront').css("background-color", "rgba(218,198,0,1)");
-        } else {
-            $('#rightfront').css("background-color", "red");
-        }
-        rightback = data[3];
-        if (rightback == 1) {
-            $('#rightback').css("background-color", "rgba(15,198,0,1)");
-        } else if (rightback == 2) {
-            $('#rightback').css("background-color", "rgba(218,198,0,1)");
-        } else {
-            $('#rightback').css("background-color", "red");
-        }
+        switchHeadbandStatus('#leftback', data[0]);
+        switchHeadbandStatus('#leftfront', data[1]);
+        switchHeadbandStatus('#rightfront', data[2]);
+        switchHeadbandStatus('#rightback', data[3]);
     });
 }
 
@@ -66,7 +34,7 @@ function disconnectFromMuse() {
 
     socket.on('muse_disconnect', function() {
         $('#musestatus').text('Muse has been disconnected. Outputting csv files.');
-        $('#headbandstatus').css("display", "none");
+        $('#headbandstatus').css('display', 'none');
     });
 }
 
@@ -83,6 +51,21 @@ function recordDataWithAudio() {
     }
 }
 
+function switchHeadbandStatus(statusid, value) {
+    // good: 1, ok: 2, bad: >= 3
+    var green_good = 'rgba(15,198,0,1)';
+    var yellow_ok = 'rgba(218,198,0,1)';
+    var red_bad = 'red';
+    if (value == 1) {
+        $(statusid).css('background-color', green_good);
+    } else if (rightback == 2) {
+        $(statusid).css('background-color', yellow_ok);
+    } else {
+        $(statusid).css('background-color', red_bad);
+    }
+}
+
+// TODO: clearer variables for each viz
 function startGraphing() {
     linegraph = createGraph();
 
@@ -102,3 +85,23 @@ function startGraphing() {
         addData(data, gammaline, gammaarr);
     });
 }
+
+function startSwirl() {
+    doSwirling();
+    socket.on('delta_relative', function(data) {
+        delta = data;
+    });
+    socket.on('theta_relative', function(data) {
+        theta = data;
+    });
+    socket.on('alpha_relative', function(data) {
+        alpha = data;
+    });
+    socket.on('beta_relative', function(data) {
+        beta = data;
+    });
+    socket.on('gamma_relative', function(data) {
+        gamma = data;
+    });
+};
+

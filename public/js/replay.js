@@ -2,100 +2,45 @@ var deltaarr_replay, thetaarr_replay, alphaarr_replay, betaarr_replay, gammaarr_
 
 // brain wave csv file uploads
 
-$('#deltafile').change(function(e) {
-    var ext = $('input#deltafile').val().split('.').pop().toLowerCase();
-
-    if($.inArray(ext, ['csv']) == -1) {
-        alert('Please upload a CSV file.');
-        return false;
+$('#csvfiles').change(function(e) {
+    var files = e.target.files;
+    if (files.length != 5) {
+        alert('Please upload the 5 brain wave files (delta.csv, theta.csv, etc.)');
     }
 
-    if (e.target.files != undefined) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var csvarr = e.target.result.split('\n');
-            deltaarr_replay = csvarr;
-            return false;
-        };
-        reader.readAsText(e.target.files[0]);
+    for (var i= 0; i < files.length; i++) {
+        if (files[i].type != 'text/csv') {
+            alert(files[i].name + ' is not a csv file!');
+        }
+        (function(file) {
+            var name = file.name;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var csvarr = e.target.result.split('\n');
+                switch (name) {
+                    case 'delta.csv':
+                        deltaarr_replay = csvarr;
+                        break;
+                    case 'theta.csv':
+                        thetaarr_replay = csvarr;
+                        break;
+                    case 'alpha.csv':
+                        alphaarr_replay = csvarr;
+                        break;
+                    case 'beta.csv':
+                        betaarr_replay = csvarr;
+                        break;
+                    case 'gamma.csv':
+                        gammaarr_replay = csvarr;
+                        break;
+                    default:
+                        alert('Please upload files only named delta.csv, theta.csv, etc.');
+                }
+                return false;
+            }
+            reader.readAsText(file);
+        })(files[i]);
     }
-
-});
-
-$('#thetafile').change(function(e) {
-    var ext = $('input#thetafile').val().split('.').pop().toLowerCase();
-
-    if($.inArray(ext, ['csv']) == -1) {
-        alert('Please upload a CSV file.');
-        return false;
-    }
-
-    if (e.target.files != undefined) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var csvarr = e.target.result.split('\n');
-            thetaarr_replay = csvarr;
-        };
-        reader.readAsText(e.target.files[0]);
-    }
-    return false;
-});
-
-$('#alphafile').change(function(e) {
-    var ext = $('input#alphafile').val().split('.').pop().toLowerCase();
-
-    if($.inArray(ext, ['csv']) == -1) {
-        alert('Please upload a CSV file.');
-        return false;
-    }
-
-    if (e.target.files != undefined) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var csvarr = e.target.result.split('\n');
-            alphaarr_replay = csvarr;
-        };
-        reader.readAsText(e.target.files[0]);
-    }
-    return false;
-});
-
-$('#betafile').change(function(e) {
-    var ext = $('input#betafile').val().split('.').pop().toLowerCase();
-
-    if($.inArray(ext, ['csv']) == -1) {
-        alert('Please upload a CSV file.');
-        return false;
-    }
-
-    if (e.target.files != undefined) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var csvarr = e.target.result.split('\n');
-            betaarr_replay = csvarr;
-        };
-        reader.readAsText(e.target.files[0]);
-    }
-    return false;
-});
-
-$('#gammafile').change(function(e) {
-    var ext = $('input#gammafile').val().split('.').pop().toLowerCase();
-
-    if($.inArray(ext, ['csv']) == -1) {
-        alert('Please upload a CSV file.');
-        return false;
-    }
-
-    if (e.target.files != undefined) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var csvarr = e.target.result.split('\n');
-            gammaarr_replay = csvarr;
-        };
-        reader.readAsText(e.target.files[0]);
-    }
-    return false;
 });
 
 // replay functions
@@ -112,79 +57,86 @@ function startAudio() {
 }
 
 function startReplayViz() {
-    linegraph = createGraph();
-    var index = 0;
+    // emoji and colors config
     var max = getMaxAllArr();
     var shift = 1 - max;
-    var config = getConfig();
+
+    // swirl config
+    var config = getSwirlConfig();
     var swirl = new CanvasSwirl(
         document.getElementById('swirl_surface'), config);
 
-    // stuff for light
+    // line config
+    linegraph = createGraph();
+
+    // light config
     socket = io.connect();
     socket.emit('openport');
     var replayaud = document.getElementById('replay-audio-player');
     replayaud.onended = function() {
         socket.emit('closeport');
     }
-
+    var index = 0;
     setInterval(function() {
         if (deltaarr_replay[index] == 'start,start,start,start') {
             startAudio();
         } else if (deltaarr_replay[index] == 'end,end,end,end') {
             // do nothing
         } else {
-            // graph
-            replayGraph(index);
-            replayEmoji(index, shift);
-            replaySwirl(swirl, index);
-            replayColors(index, shift);
+            var delta_float = parseFloat(deltaarr_replay[index]);
+            var theta_float = parseFloat(thetaarr_replay[index]);
+            var alpha_float = parseFloat(alphaarr_replay[index]);
+            var beta_float = parseFloat(betaarr_replay[index]);
+            var gamma_float = parseFloat(gammaarr_replay[index]);
+
+            replayGraph(delta_float, theta_float, alpha_float, beta_float, gamma_float);
+            replayEmoji(delta_float+shift, theta_float+shift, alpha_float+shift, beta_float+shift, gamma_float+shift);
+            replaySwirl(swirl, delta_float, theta_float, alpha_float, beta_float, gamma_float);
+            replayColors(delta_float+shift, theta_float+shift, alpha_float+shift, beta_float+shift, gamma_float+shift);
             replayLight(index);
         }
         index++;
     }, 1000);
 }
 
-function replayGraph(index) {
-    addData([deltaarr_replay[index]], deltaline, deltaarr);
-    addData([thetaarr_replay[index]], thetaline, thetaarr);
-    addData([alphaarr_replay[index]], alphaline, alphaarr);
-    addData([betaarr_replay[index]], betaline, betaarr);
-    addData([gammaarr_replay[index]], gammaline, gammaarr);
+function replayGraph(delta_float, theta_float, alpha_float, beta_float, gamma_float) {
+    addData([delta_float], deltaline, deltaarr);
+    addData([theta_float], thetaline, thetaarr);
+    addData([alpha_float], alphaline, alphaarr);
+    addData([beta_float], betaline, betaarr);
+    addData([gamma_float], gammaline, gammaarr);
+    max = delta_float;
+    max_line = 'delta';
+    if (alpha_float > max) {
+        max = alpha_float;
+        max_line = 'alpha';
+    }
+    if (beta_float > max) {
+        max_line = 'beta';
+    }
+    removeAllButOneLine(max_line);
 }
 
-function replayEmoji(index, shift) {
-    var delta_shift = parseFloat(deltaarr_replay[index]) + shift;
-    var theta_shift = parseFloat(thetaarr_replay[index]) + shift;
-    var alpha_shift = parseFloat(alphaarr_replay[index]) + shift;
-    var beta_shift = parseFloat(betaarr_replay[index]) + shift;
-    var gamma_shift = parseFloat(gammaarr_replay[index]) + shift;
-
-    $('#delta-emoji').animate({opacity: delta_shift});
-    $('#theta-emoji').animate({opacity: theta_shift});
-    $('#alpha-emoji').animate({opacity: alpha_shift});
-    $('#beta-emoji').animate({opacity: beta_shift});
-    $('#gamma-emoji').animate({opacity: gamma_shift});
+function replayEmoji(delta_float, theta_float, alpha_float, beta_float, gamma_float) {
+    $('#delta-emoji').animate({opacity: delta_float});
+    $('#theta-emoji').animate({opacity: theta_float});
+    $('#alpha-emoji').animate({opacity: alpha_float});
+    $('#beta-emoji').animate({opacity: beta_float});
+    $('#gamma-emoji').animate({opacity: gamma_float});
 }
 
-function replaySwirl(my_swirl, index){
-  var new_config = getConfig();
-  updateSwirl(new_config, deltaarr_replay[index], thetaarr_replay[index], alphaarr_replay[index], betaarr_replay[index], gammaarr_replay[index]);
-  my_swirl.applyConfig(new_config);
+function replaySwirl(my_swirl, delta_float, theta_float, alpha_float, beta_float, gamma_float){
+    var new_config = getSwirlConfig();
+    updateSwirl(new_config, delta_float, theta_float, alpha_float, beta_float, gamma_float);
+    my_swirl.applyConfig(new_config);
 }
 
-function replayColors(index, shift) {
-    var delta_shift = parseFloat(deltaarr_replay[index]) + shift;
-    var theta_shift = parseFloat(thetaarr_replay[index]) + shift;
-    var alpha_shift = parseFloat(alphaarr_replay[index]) + shift;
-    var beta_shift = parseFloat(betaarr_replay[index]) + shift;
-    var gamma_shift = parseFloat(gammaarr_replay[index]) + shift;
-
-    $('#delta-color').animate({opacity: delta_shift});
-    $('#theta-color').animate({opacity: theta_shift});
-    $('#alpha-color').animate({opacity: alpha_shift});
-    $('#beta-color').animate({opacity: beta_shift});
-    $('#gamma-color').animate({opacity: gamma_shift});
+function replayColors(delta_float, theta_float, alpha_float, beta_float, gamma_float) {
+    $('#delta-color').animate({opacity: delta_float});
+    $('#theta-color').animate({opacity: theta_float});
+    $('#alpha-color').animate({opacity: alpha_float});
+    $('#beta-color').animate({opacity: beta_float});
+    $('#gamma-color').animate({opacity: gamma_float});
 }
 
 
@@ -198,10 +150,10 @@ function replayLight(index) {
 
     var sendData = 'd';
     var max = delta_float;
-    if (theta_float > max) {
+    /*if (theta_float > max) {
         max = theta_float;
         sendData = 't';
-    }
+    }*/
     if (alpha_float > max) {
         max = alpha_float;
         sendData = 'a';
@@ -210,10 +162,10 @@ function replayLight(index) {
         max = beta_float;
         sendData = 'b';
     }
-    if (gamma_float > max) {
+    /*if (gamma_float > max) {
         max = gamma_float;
         sendData = 'g'
-    }
+    }*/
     socket.emit('writeserial', sendData);
 }
 
@@ -225,7 +177,6 @@ function getMaxArr(arr) {
             max = num;
         }
     }
-    console.log(max);
     return max;
 }
 
