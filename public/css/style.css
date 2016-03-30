@@ -166,9 +166,22 @@ audio {
     margin-top: 160px;
 }
 
-/*********** EMOJI ***********/
+/*********** SWIRL ***********/
 #swirl-container {
     margin-top: 80px;
+}
+
+/*********** SLIDERS  ***********/
+.sliders {
+    height: 200px;
+    display: block;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+#sliders-container {
+    width: 85%;
+    margin-top: 160px;
 }
 
 /*********** COLORS ***********/

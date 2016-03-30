@@ -14,6 +14,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="scripts/smoothie/smoothie.js"></script>
 <script src="js/swirl_0.8_min.js"></script>
+<script src="js/d3.v3.min.js" charset="utf-8"></script>
 </head>
 <body>
     <!--menus-->
@@ -65,6 +66,7 @@
             <span id ="viz-menu-lines" class="viz-menu-item viz-menu-clickable viz-menu-active">Lines</span>
             <span id="viz-menu-emoji" class="viz-menu-item viz-menu-clickable">Emoji</span>
             <span id="viz-menu-swirl" class="viz-menu-item viz-menu-clickable">Swirl</span>
+            <span id="viz-menu-sliders" class="viz-menu-item viz-menu-clickable">Sliders</span>
             <span id="viz-menu-colors" class="viz-menu-item viz-menu-clickable">Colors</span>
             </div>
         </div>
@@ -84,15 +86,32 @@
             </div>-->
         </div>
         <div id="emoji-container" style="display: none">
-            <img class="emoji" id="delta-emoji" src="img/sleepy-wide.svg">
+            <img class="emoji" id="delta-emoji" src="img/delta.svg">
             <!--<img class="emoji" id="theta-emoji"  src="img/theta.svg">-->
-            <img class="emoji" id="alpha-emoji" src="img/relaxed-wide.svg">
-            <img class="emoji" id="beta-emoji" src="img/thinking-wide.svg">
+            <img class="emoji" id="alpha-emoji" src="img/alpha.svg">
+            <img class="emoji" id="beta-emoji" src="img/beta.svg">
             <!--<img class="emoji" id="gamma-emoji" src="img/gamma.svg">-->
         </div>
         <div id="swirl-container" style="display: none">
             <canvas id ="swirl_surface" width = '700' height = '700'>
         </div>
+        <div id="sliders-container" style="display: none">
+            <div class="sliders" id="delta-slide">
+              <svg width = "2000" height = "200">
+              <line x1="100" y1="100" x2="1400" y2="100" style="stroke:rgb(200,200,200);stroke-width:5">
+              </svg>
+            </div>
+            <div class="sliders" id="alpha-slide">
+              <svg width = "2000" height = "200">
+              <line x1="100" y1="100" x2="1400" y2="100" style="stroke:rgb(200,200,200);stroke-width:5">
+              </svg>
+            </div>
+            <div class="sliders" id="beta-slide">
+              <svg width = "2000" height = "200">
+              <line x1="100" y1="100" x2="1400" y2="100" style="stroke:rgb(200,200,200);stroke-width:5">
+              </svg>
+            </div>
+          </div>
         <div id="colors-container" style="display: none">
             <div id="delta-color" class="gradient-olive-green color"></div>
             <!--<div id="theta-color" class="gradient-yellow color"></div>-->

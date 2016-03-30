@@ -10,7 +10,7 @@ var my_config = {
     thicknessMin:              1,
     thicknessMax:              1,
     fadeTime:                  0.3,
-    rotationVelMin:            0.2,
+    rotationVelMin:            0.05,
     rotationVelMax:            0.4,
     originX:                   "center",
     originY:                   "center",
@@ -64,9 +64,10 @@ function doSwirling() {
 
 function updateSwirl(config, newDelta, newTheta, newAlpha, newBeta, newGamma){
     // config.count = newBeta*350+150;
-    config.count = newBeta*350+150;
-    config.rotationVelMax = .2+.8*(1-newDelta);
-    config.distanceJitterMax = Math.max(0,(1-newAlpha)*15-1);
+    config.count = newBeta*250+50;
+    config.rotationVelMax = .8*(1-newDelta);
+    config.rotationVelMin = Math.max(0.2, config.rotationVelMax-0.3);
+    config.distanceJitterMax = Math.max(0,(1-newAlpha)*15-5);
     // config.hueMax = 30+(600*newDelta);
     //config.hueIncrement = 1+4*newDelta;
     // config.saturationMax = 90-(newDelta*50)

@@ -76,7 +76,62 @@ function startReplayViz() {
     replayaud.onended = function() {
         socket.emit('closeport');
     }
+
+    //sliders config
+    var delta_slide = 
+      d3.select("#delta-slide").select("svg").append("svg")
+        .attr("x", deltaarr_replay[0])
+        .attr("width", 195)
+        .attr("height",195);
+    delta_slide.append("circle")
+      .attr("cx", 96)
+      .attr("cy", 96)
+      .attr("r", 90)
+      .style("fill", "rgb(141,186,106)");
+    delta_slide.append("text")
+      .attr("x", 79.5)
+      .attr("y", 115.5)
+      .style("fill", "white")
+      .style("font-size", "68")
+      .text("\u03b4");
+
+    var alpha_slide = 
+      d3.select("#alpha-slide").select("svg").append("svg")
+        .attr("x",alphaarr_replay[0])
+        .attr("width", 195)
+        .attr("height", 195);
+    alpha_slide.append("circle")
+      .attr("cx", 96)
+      .attr("cy", 96)
+      .attr("r", 90)
+      .style("fill", "rgb(128,201,232)");
+    alpha_slide.append("text")
+      .attr("x", 79.5)
+      .attr("y", 115.5)
+      .style("fill", "white")
+      .style("font-size", "68")
+      .text("\u03b1");
+                    
+    var beta_slide = 
+      d3.select("#beta-slide").select("svg").append("svg")
+        .attr("x",betaarr_replay[0])
+        .attr("width", 195)
+        .attr("height", 195);
+    beta_slide.append("circle")
+      .attr("cx", 96)
+      .attr("cy", 96)
+      .attr("r", 90)
+      .style("fill", "rgb(218,198,0)");
+    beta_slide.append("text")
+      .attr("x", 79.5)
+      .attr("y", 115.5)
+      .style("fill", "white")
+      .style("font-size", "68")
+      .text("\u03b2");
+
     var index = 0;
+
+
     setInterval(function() {
         if (deltaarr_replay[index] == 'start,start,start,start') {
             startAudio();
@@ -93,6 +148,7 @@ function startReplayViz() {
             replayEmoji(delta_float+shift, theta_float+shift, alpha_float+shift, beta_float+shift, gamma_float+shift);
             replaySwirl(swirl, delta_float, theta_float, alpha_float, beta_float, gamma_float);
             replayColors(delta_float+shift, theta_float+shift, alpha_float+shift, beta_float+shift, gamma_float+shift);
+            replaySliders(delta_slide, alpha_slide, beta_slide, delta_float, theta_float, alpha_float, beta_float, gamma_float);
             // replayLight(index);
         }
         index++;
@@ -129,6 +185,18 @@ function replaySwirl(my_swirl, delta_float, theta_float, alpha_float, beta_float
     var new_config = getSwirlConfig();
     updateSwirl(new_config, delta_float, theta_float, alpha_float, beta_float, gamma_float);
     my_swirl.applyConfig(new_config);
+}
+
+function replaySliders(delta_slide, alpha_slide, beta_slide, delta_float, theta_float, alpha_float, beta_float, gamma_float){
+    delta_slide.transition()
+      .duration(750)
+      .attr("x", delta_float*1500);
+    alpha_slide.transition()
+      .duration(750)
+      .attr("x", alpha_float*1500);
+    beta_slide.transition()
+      .duration(750)
+      .attr("x", beta_float*1500);
 }
 
 function replayColors(delta_float, theta_float, alpha_float, beta_float, gamma_float) {

@@ -13,28 +13,38 @@ $(".mode-button").click(function() {
 });
 
 $(".viz-menu-item").click(function() {
-    $(".viz-menu-item").not(this).removeClass("viz-menu-active");
-    $(this).toggleClass("viz-menu-active");
-    var buttonid = $(this).attr("id");
-    if (buttonid == "viz-menu-lines") {
-        $("#graph-container").css("display", "inline-block");
-        $("#emoji-container").css("display", "none");
-        $("#swirl-container").css("display", "none");
-        $("#colors-container").css("display", "none");
-    } else if (buttonid == "viz-menu-emoji") {
-        $("#graph-container").css("display", "none");
-        $("#emoji-container").css("display", "inline-block");
-        $("#swirl-container").css("display", "none");
-        $("#colors-container").css("display", "none");
-    } else if (buttonid == "viz-menu-swirl") {
-        $("#graph-container").css("display", "none");
-        $("#emoji-container").css("display", "none");
-        $("#swirl-container").css("display", "inline-block");
-        $("#colors-container").css("display", "none");
-    } else if (buttonid == "viz-menu-colors") {
-        $("#graph-container").css("display", "none");
-        $("#emoji-container").css("display", "none");
-        $("#swirl-container").css("display", "none");
-        $("#colors-container").css("display", "inline-block");
-    }
+  $(".viz-menu-item").not(this).removeClass("viz-menu-active");
+  $(this).toggleClass("viz-menu-active");
+  var buttonid = $(this).attr("id");
+  if (buttonid == "viz-menu-lines") {
+      $("#graph-container").css("display", "inline-block");
+      $("#emoji-container").css("display", "none");
+      $("#swirl-container").css("display", "none");
+      $("#sliders-container").css("display", "none");
+      $("#colors-container").css("display", "none");
+  } else if (buttonid == "viz-menu-emoji") {
+      $("#graph-container").css("display", "none");
+      $("#emoji-container").css("display", "inline-block");
+      $("#swirl-container").css("display", "none");
+      $("#sliders-container").css("display", "none");
+      $("#colors-container").css("display", "none");
+  } else if (buttonid == "viz-menu-swirl") {
+      $("#graph-container").css("display", "none");
+      $("#emoji-container").css("display", "none");
+      $("#swirl-container").css("display", "inline-block");
+      $("#sliders-container").css("display", "none");
+      $("#colors-container").css("display", "none");
+  } else if (buttonid == "viz-menu-sliders") {
+      $("#graph-container").css("display", "none");
+      $("#emoji-container").css("display", "none");
+      $("#swirl-container").css("display", "none");
+      $("#sliders-container").css("display", "inline-block");
+      $("#colors-container").css("display", "none");
+  } else if (buttonid == "viz-menu-colors") {
+      $("#graph-container").css("display", "none");
+      $("#emoji-container").css("display", "none");
+      $("#swirl-container").css("display", "none");
+      $("#sliders-container").css("display", "none");
+      $("#colors-container").css("display", "inline-block");
+  }
 });
