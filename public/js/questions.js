@@ -39,25 +39,11 @@ $('#next-start').click(function() {
     $('#question-container').css('display', 'inline-block');
     // update the question text to the first one
     $('.question').text(question_list[0]['question']);
-    // start recording for this question
-    // stopSnapshotRecording(); // in case clicked start during training
+    // start recording
     startQuestionRecording();
     study_started = true;
 })
 
-var graph_snapshot = [];
-var new_snapshot_delta = [];
-var new_snapshot_theta = [];
-var new_snapshot_alpha = [];
-var new_snapshot_beta = [];
-var new_snapshot_gamma = [];
-
-var question_delta = [];
-
-var snapshot_recording = false;
-var first = true;
-
-// QUESTION
 var current = 0;
 $('#next').click(function() {
     if (study_started) {
@@ -66,14 +52,8 @@ $('#next').click(function() {
         // TODO: add 2 min timer before showing next button
         // save the answer to the question
         saveCurrentAnswer();
-        // stop the current snapshot recording if there is one
-        /*if (snapshot_recording) {
-            stopSnapshotRecording();
-        }*/
         var answer_brain_activity = createAnswerBrainActivity();
         question_list[current]['brainactivity'] = answer_brain_activity;
-        // question_list[current]['snapshots'] = graph_snapshot;
-        // graph_snapshot = [];
         current += 1;
         // ALL QUESTIONS ANSWERED move on
         if (current >= question_list.length) {
@@ -91,6 +71,7 @@ $('#next').click(function() {
     }
 });
 
+var question_delta = [];
 function createAnswerBrainActivity() {
     var activity = {};
     activity['delta'] = question_delta;
@@ -105,6 +86,7 @@ function saveCurrentAnswer() {
     $('textarea#question-response').val('');
 }
 
+/********* EDIT MODE **********/
 function displayEditMode() {
     $('#question-container').css('display', 'none');
 
@@ -115,16 +97,10 @@ function displayEditMode() {
     $('#edit-question').text(question_list[0]['question']);
     $('#edit-answer').text(question_list[0]['answer']);
 
-    // graph
-    var linegraph = createGraph();
     $('#visualization-container').css('display', 'inline-block');
-    // disconnectFromMuse();
-    // clearGraphData();
-    // linegraph.stop();
-    //$('#visualization-record').css('display', 'none');
+    displayBrainActivity(0);
 }
 
-/********* EDIT MODE **********/
 var current_edit = 0;
 $('#edit-next').click(function() {
     if (current_edit == 0) {
@@ -136,8 +112,11 @@ $('#edit-next').click(function() {
     current_edit += 1;
     $('#edit-question').text(question_list[current_edit]['question']);
     $('#edit-answer').text(question_list[current_edit]['answer']);
-    clearGraphData();
+    eeg_line.clear();
+    displayBrainActivity(current_edit);
     // update graph to show the current question's activity
+
+    // TODO add E4
     // brain activity - question_list[current_edit]['brainactivity']
     // question_list[current_edit]['snapshots']
 });
@@ -152,18 +131,56 @@ $('#edit-back').click(function() {
     if (current_edit >= question_list.length-2) {
         $('#edit-next').css('display', 'inline-block');
     }
+    eeg_line.clear();
+    displayBrainActivity(current_edit);
     // update graph to show the current question's activity
 });
 
-/********* GRAPH **********/
+/********* VISUALIZATIONS **********/
+var eeg_line;
+function displayBrainActivity(question_index) {
+    var deltaactivity = question_list[question_index]['brainactivity']['delta'];
+    // console.log(deltaactivity)
+    var eeg_labels = [];
+    for (var i = 0; i < deltaactivity.length; i++) {
+        eeg_labels.push(i.toString());
+    }
+    var eeg_data = {
+        labels: eeg_labels,
+        datasets: [
+            {
+                label: 'Delta',
+                fill: false,
+                pointBackgroundColor: 'rgba(75,192,192,1)',
+                borderColor: 'rgba(75,192,192,1)',
+                data: question_list[question_index]['brainactivity']['delta']
+            }
+        ]
+    }
+    var ctx = $('#eeg-graph');
+    eeg_line = new Chart(ctx, {
+        type: 'line',
+        data: eeg_data,
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        steps: 5,
+                        stepValue: 0.2,
+                        max: 1
+                    }
+                }]
+            }
+        }
+    });
+}
+
 function startQuestionRecording() {
     socket.on('delta_relative', function(data) {
         if (study_started) {
             question_delta.push(data);
-        }
-        if (snapshot_recording && study_started) {
-            console.log('delta snapshot recording');
-            new_snapshot_delta.push(data);
         }
     });
     socket.on('theta_relative', function(data) {
@@ -175,89 +192,3 @@ function startQuestionRecording() {
     socket.on('gamma_relative', function(data) {
     });
 }
-
-var replayinterval;
-function editModeStartReplayViz(brainactivity) {
-    var deltaarr_replay = brainactivity['delta'];
-    var index = 0;
-    replayinterval = setInterval(function() {
-        var delta_float = parseFloat(brainactivity['delta'][index]);
-        /*var theta_float = parseFloat(brainactivity['theta'][index]);
-        var alpha_float = parseFloat(brainactivity['alpha'][index]);
-        var beta_float = parseFloat(brainactivity['beta'][index]);
-        var gamma_float = parseFloat(brainactivity['gamma'][index]);
-        */
-        replayGraph(delta_float);//, theta_float, alpha_float, beta_float, gamma_float);
-        index++;
-    }, 1000);
-    if (index > brainactivity['delta'].length) {
-        clearInterval(replayinterval);
-        started_replay = false;
-    }
-}
-
-function replayGraph(delta_float) {//, theta_float, alpha_float, beta_float, gamma_float) {
-    addData([delta_float], deltaline, deltaarr);
-}
-
-var paused_replay = false;
-var started_replay = false;
-$('#visualization-replay-button').click(function() {
-    if (paused_replay && started_replay) {
-        console.log('restart');
-        linegraph.start();
-    } else {
-        started_replay = true;
-        console.log('replay');
-        editModeStartReplayViz(question_list[current_edit]['brainactivity']);
-    }
-    paused_replay = false;
-});
-
-$('#visualization-pause-button').click(function() {
-    paused_replay = true;
-    linegraph.stop();
-});
-
-/* snapshot recording
-$('#visualization-toggle-rewind-button').click(function() {
-    linegraph.options.scrollBackwards = true;
-});
-
-$('#visualization-restart-button').click(function() {
-    clearGraphData();
-    if (paused_replay) {
-        linegraph.start();
-    }
-});
-
-
-$('#visualization-record-button').click(function() {
-    if (snapshot_recording) {
-        stopSnapshotRecording();
-    } else {
-        startSnapshotRecording();
-    }
-});
-
-function startSnapshotRecording() {
-    snapshot_recording = true;
-    $('#visualization-record-status').text('Brain activity snapshot being recorded');
-    $('#visualization-record-button').text('Stop recording');
-    $('#visualization-caption').css('display', 'block');
-    if (study_started) {
-        new_snapshot_delta = [];
-    }
-}
-
-function stopSnapshotRecording() {
-    snapshot_recording = false;
-    $('#visualization-record-status').text('');
-    $('#visualization-record-button').text('Start recording');
-    $('#visualization-caption').css('display', 'none');
-    if (study_started) {
-        var new_snapshot = {}
-        new_snapshot['delta'] = new_snapshot_delta;
-        graph_snapshot.push(new_snapshot);
-    }
-} */
