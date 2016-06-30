@@ -78,7 +78,7 @@ function startReplayViz() {
     }
 
     //sliders config
-    var delta_slide = 
+    var delta_slide =
       d3.select("#delta-slide").select("svg").append("svg")
         .attr("x", deltaarr_replay[0])
         .attr("width", 195)
@@ -95,7 +95,7 @@ function startReplayViz() {
       .style("font-size", "68")
       .text("\u03b4");
 
-    var alpha_slide = 
+    var alpha_slide =
       d3.select("#alpha-slide").select("svg").append("svg")
         .attr("x",alphaarr_replay[0])
         .attr("width", 195)
@@ -111,8 +111,8 @@ function startReplayViz() {
       .style("fill", "white")
       .style("font-size", "68")
       .text("\u03b1");
-                    
-    var beta_slide = 
+
+    var beta_slide =
       d3.select("#beta-slide").select("svg").append("svg")
         .attr("x",betaarr_replay[0])
         .attr("width", 195)
@@ -145,19 +145,20 @@ function startReplayViz() {
             var gamma_float = parseFloat(gammaarr_replay[index]);
 
             replayGraph(delta_float, theta_float, alpha_float, beta_float, gamma_float);
-            replayEmoji(delta_float+shift, theta_float+shift, alpha_float+shift, beta_float+shift, gamma_float+shift);
-            replaySwirl(swirl, delta_float, theta_float, alpha_float, beta_float, gamma_float);
-            replayColors(delta_float+shift, theta_float+shift, alpha_float+shift, beta_float+shift, gamma_float+shift);
-            replaySliders(delta_slide, alpha_slide, beta_slide, delta_float, theta_float, alpha_float, beta_float, gamma_float);
+            // replayEmoji(delta_float+shift, theta_float+shift, alpha_float+shift, beta_float+shift, gamma_float+shift);
+            // replaySwirl(swirl, delta_float, theta_float, alpha_float, beta_float, gamma_float);
+            // replayColors(delta_float+shift, theta_float+shift, alpha_float+shift, beta_float+shift, gamma_float+shift);
+            // replaySliders(delta_slide, alpha_slide, beta_slide, delta_float, theta_float, alpha_float, beta_float, gamma_float);
             // replayLight(index);
+            replayMaxColors(delta_float, theta_float, alpha_float, beta_float, gamma_float);
         }
         index++;
     }, 1000);
 }
 
-function replayGraph(delta_float, theta_float, alpha_float, beta_float, gamma_float) {
+function replayGraph(delta_float) {//, theta_float, alpha_float, beta_float, gamma_float) {
     addData([delta_float], deltaline, deltaarr);
-    addData([theta_float], thetaline, thetaarr);
+    /*addData([theta_float], thetaline, thetaarr);
     addData([alpha_float], alphaline, alphaarr);
     addData([beta_float], betaline, betaarr);
     addData([gamma_float], gammaline, gammaarr);
@@ -170,7 +171,7 @@ function replayGraph(delta_float, theta_float, alpha_float, beta_float, gamma_fl
     if (beta_float > max) {
         max_line = 'beta';
     }
-    removeAllButOneLine(max_line);
+    removeAllButOneLine(max_line);*/
 }
 
 function replayEmoji(delta_float, theta_float, alpha_float, beta_float, gamma_float) {
@@ -207,15 +208,29 @@ function replayColors(delta_float, theta_float, alpha_float, beta_float, gamma_f
     $('#gamma-color').animate({opacity: gamma_float});
 }
 
+function replayMaxColors(delta_float, theta_float, alpha_float, beta_float, gamma_float) {
+    var max = delta_float;
+    var delta_opacity = 0.7;
+    var alpha_opacity = 0;
+    var beta_opacity = 0;
+    if (alpha_float > max) {
+        max = alpha_float;
+        delta_opacity = 0;
+        alpha_opacity = 0.7;
+        beta_opacity = 0;
+    }
+    if (beta_float > max) {
+        delta_opacity = 0;
+        alpha_opacity = 0;
+        beta_opacity = 0.7;
+    }
+    $('#delta-color').animate({opacity: delta_opacity});
+    $('#alpha-color').animate({opacity: alpha_opacity});
+    $('#beta-color').animate({opacity: beta_opacity});
+}
 
 function replayLight(index) {
     // write 'd, t, a, b, g' for which light to display
-    var delta_float = parseFloat(deltaarr_replay[index]);
-    var theta_float = parseFloat(thetaarr_replay[index]);
-    var alpha_float = parseFloat(alphaarr_replay[index]);
-    var beta_float = parseFloat(betaarr_replay[index]);
-    var gamma_float = parseFloat(gammaarr_replay[index]);
-
     var sendData = 'd';
     var max = delta_float;
     /*if (theta_float > max) {

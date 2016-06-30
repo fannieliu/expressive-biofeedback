@@ -4,13 +4,13 @@ var audplaying = false;
 function connectToMuse() {
     socket = io.connect();
     socket.emit('connectmuse');
-
+    console.log('connect to muse');
     socket.on('muse_connected', function() {
         // TODO: update record for all viz
-        startGraphing();
-        startSwirl();
+        // startGraphing();
+        // startSwirl();
         $('#muse-status').css('display', 'inline-block');
-        $('#connect-message').text('Connected! Now recording.');
+        $('#connect-message').text('Connected!');
     });
 
     socket.on('muse_uncertain', function() {
@@ -32,9 +32,11 @@ function connectToMuse() {
 function disconnectFromMuse() {
     socket.emit('disconnectmuse');
 
+    console.log('disconnect');
+
     socket.on('muse_disconnect', function() {
-        $('#musestatus').text('Muse has been disconnected. Outputting csv files.');
-        $('#headbandstatus').css('display', 'none');
+        $('#connect-message').text('Muse has been disconnected.');
+        $('#muse-status').css('display', 'none');
     });
 }
 

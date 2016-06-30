@@ -49,7 +49,7 @@ header {
 }
 
 #record-menu {
-    margin-top: 5px;
+    margin-top: 15px;
     display: inline-block;
 }
 
@@ -122,8 +122,6 @@ audio {
 /*********** GRAPH ***********/
 
 #graph-container {
-    margin-top: 100px;
-    padding: 10px;
     color: #eee;
 }
 
@@ -145,12 +143,13 @@ audio {
     vertical-align: top;
 }
 
-#graph-description {
+/*#graph-description {
     display: inline-block;
     width: 100px;
     vertical-align: top;
     margin-left: 15px;
 }
+*/
 
 /*********** EMOJI ***********/
 .emoji {

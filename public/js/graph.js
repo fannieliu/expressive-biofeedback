@@ -132,6 +132,14 @@ function createGraph() {
     return smoothie;
 }
 
+function clearGraphData() {
+    deltaline.data = [];
+    thetaline.data = [];
+    alphaline.data = [];
+    betaline.data = [];
+    gammaline.data = [];
+}
+
 function addData(data, line, dataarr) {
     line.append(new Date().getTime(), data);
     dataarr.push(data);
@@ -140,14 +148,14 @@ function addData(data, line, dataarr) {
 $('#graph-container ul li:not(.active)')
     .css({ opacity: 0.5 })
     // now bind to anon non-active items
-    .hover(function() {
+    /*.hover(function() {
         $(this).animate({ opacity: 1 });
         var graphid = $(this).attr('id');
         $('#graph-description').text(linemap[graphid]['description']).css('color', linemap[graphid]['normal']);
     }, function() {
         $(this).animate({ opacity: 0.5 });
         $('#graph-description').text('');
-    });
+    });*/
 
 $('li').hover(function() {
     $(this).toggleClass('active');

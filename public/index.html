@@ -5,8 +5,9 @@
 <title>Biofeedback</title>
 <!--styles-->
 <link rel="stylesheet" href="css/style.css" type="text/css">
+<link rel="stylesheet" href="css/question-style.css" type="text/css">
 <!--fonts-->
-<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
 <!--scripts-->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -15,15 +16,18 @@
 <script src="scripts/smoothie/smoothie.js"></script>
 <script src="js/swirl_0.8_min.js"></script>
 <script src="js/d3.v3.min.js" charset="utf-8"></script>
+<script src="flot/jquery.js"></script>
+<script src="flot/jquery.flot.js"></script>
+<script src="flot/jquery.flot.navigate.js"></script>
 </head>
 <body>
     <!--menus-->
     <header>
-        <div id="mode" class="header-item">
+        <!--<div id="mode" class="header-item">
             Mode:
             <span id="record-button" class="mode-button mode-button-active clickable">Record</span>
             <span id="replay-button" class="mode-button clickable">Replay</span>
-        </div>
+        </div>-->
         <div id="record-menu">
             <div id="muse-actions" class="header-item">
                 Muse:
@@ -38,11 +42,11 @@
                 <span id="rightfront" class="channelstatus">RF</span>
                 <span id="rightback" class="channelstatus">RB</span>
             </div>
-            <div id="record-audio" class="header-item">
+            <!--<div id="record-audio" class="header-item">
                 <audio id="record-audio-player" onplay="recordDataWithAudio()" controls>
                     <source src="audio/darkknight.mp3" type="audio/mpeg">
                 </audio>
-            </div>
+            </div>-->
         </div>
         <div id="replay-menu">
             <div id="upload-csv" class="header-item">
@@ -60,67 +64,140 @@
             </div>
         </div>
     </header>
+    <!--
     <div id="viz-menu">
         <div id="viz-menu-items">
             <span class="viz-menu-item" style="opacity: 0.7">Visualization:</span>
             <span id ="viz-menu-lines" class="viz-menu-item viz-menu-clickable viz-menu-active">Lines</span>
-            <span id="viz-menu-emoji" class="viz-menu-item viz-menu-clickable">Emoji</span>
+            <!--<span id="viz-menu-emoji" class="viz-menu-item viz-menu-clickable">Emoji</span>
             <span id="viz-menu-swirl" class="viz-menu-item viz-menu-clickable">Swirl</span>
             <span id="viz-menu-sliders" class="viz-menu-item viz-menu-clickable">Sliders</span>
             <span id="viz-menu-colors" class="viz-menu-item viz-menu-clickable">Colors</span>
             </div>
         </div>
-    </div>
+    </div>-->
     <!--visualizations-->
     <div id="container">
-        <div id="graph-container">
-            <canvas id="graph" width="1200" height="600"></canvas>
-            <ul class="graph-labels">
-                <li id="delta" style="color: rgba(141, 186, 106, 1);">Delta</li>
-                <!--<li id="theta" style="color: rgba(218,198,0,1);">Theta</li>-->
-                <li id="alpha" style="color: rgba(128, 201, 232, 1);">Alpha</li>
-                <li id="beta" style="color: rgba(218, 198, 0, 1);">Beta</li>
-                <!--<li id="gamma" style="csolor: rgba(3,55,244,1);">Gamma</li>-->
-            </ul>
-            <!--<div id="graph-description">
-            </div>-->
+        <div id="start-container" class="instructions">
+            <span class="question-title">Sharing Brain Activity Study</span>
+            <br/><br/>
+            <span class="question-header">Thank you for participating in this study. We would like you to answer a few questions about yourself while your brain activity is recorded with the Muse headset. As you answer the questions, you will have the opportunity to choose snapshots of your brain activity to include with your answers. Your answers and brain activity snapshots will be used by others to assess determine how desirable a friend or romantic partner you are.</span>
+            <span id="next-training" class="clickable">Next: Instructions</span>
         </div>
-        <div id="emoji-container" style="display: none">
-            <img class="emoji" id="delta-emoji" src="img/delta.svg">
-            <!--<img class="emoji" id="theta-emoji"  src="img/theta.svg">-->
-            <img class="emoji" id="alpha-emoji" src="img/alpha.svg">
-            <img class="emoji" id="beta-emoji" src="img/beta.svg">
-            <!--<img class="emoji" id="gamma-emoji" src="img/gamma.svg">-->
+        <div id="training-container" class="instructions">
+            <span class="question-title">Instructions</span>
+            <br/><br/>
+            <span class="question-header">The experimenter will now setup the Muse headset, which will record your brain activity. Below you can see the setup for answering questions. On the left you will be prompted with 10 different questions. On the right, you will be able to see your brain activity. The experimenter will now explain how to record snapshots of your brain activity. </span>
+            <br/><br/>
+            <span id="next-start-label" class="question-header">
+            Do not click 'Start Study' until the experimenter tells you to.
+            </span>
+            <span id="next-start" class="clickable">Start Study</span>
         </div>
-        <div id="swirl-container" style="display: none">
-            <canvas id ="swirl_surface" width = '700' height = '700'>
+        <div id="edit-container" class="instructions">
+            <span class="question-title">Edit Brain Activity Snapshots</span>
+            <br/><br/>
+            <span class="question-header">You have completed all the questions. You can now edit the the brain activity snapshots you would like to include with you answers. To the left you can see the answers to the different questions. You can view the brain activity that was recorded while you answered each question.</span>
+            <br/><br/>
+            <span id="next-edit-label" class="question-header">
+            Do not click until you are done editing, as you will not be able to go back.
+            </span>
+            <span id="next-survey" class="clickable">Finished Editing</span>
         </div>
-        <div id="sliders-container" style="display: none">
-            <div class="sliders" id="delta-slide">
-              <svg width = "2000" height = "200">
-              <line x1="100" y1="100" x2="1400" y2="100" style="stroke:rgb(200,200,200);stroke-width:5">
-              </svg>
+        <div id="answer-container" class="left-container">
+            <span class="question-header">Your answers to the questions are below.</span>
+            <span id="edit-question" class="question"></span>
+            <span id="edit-answer" class="answer"></span>
+            <div id="question-footer">
+                <div class="question-next">
+                    <span id="edit-back" class="clickable">Previous Question</span>
+                </div>
+                <div class="question-next">
+                    <span id="edit-next" class="clickable">Next Question</span>
+                </div>
             </div>
-            <div class="sliders" id="alpha-slide">
-              <svg width = "2000" height = "200">
-              <line x1="100" y1="100" x2="1400" y2="100" style="stroke:rgb(200,200,200);stroke-width:5">
-              </svg>
+        </div>
+        <div id="question-container" class="left-container">
+            <span class="question-header">Please answer the following questions within the time limit. You may choose to share a snapshot of your brain activity by clicking the buttons to the right.</span>
+            <span id="answer-question" class="question">Question 1: What is your favorite color?</span>
+            <textarea id="question-response"></textarea>
+            <div id="question-footer">
+                <div id="question-next-label">
+                    Please do not click next until you are done answering. You will not be able to go back.
+                </div>
+                <!-- include timer? -->
+                <div class="question-next">
+                    <span id="next" class="clickable">Next Question</span>
+                </div>
             </div>
-            <div class="sliders" id="beta-slide">
-              <svg width = "2000" height = "200">
-              <line x1="100" y1="100" x2="1400" y2="100" style="stroke:rgb(200,200,200);stroke-width:5">
-              </svg>
+        </div>
+        <div id="visualization-container">
+            <div id="visualization-replay" class="visualization-button">
+                <span id="visualization-replay-button" class="clickable">Start Replay</span>
+                <span id="visualization-pause-button" class="clickable">Pause Replay</span>
+                <span id="visualization-toggle-rewind-button" class="clickable">Replay Backwards</span>
+                <span id="visualization-restart-button" class="clickable">Restart Replay</span>
             </div>
+            <div id="visualization-description">
+                <b>Delta waves</b> are associated with deep sleep. This is represented by the green line.
+                <br/>
+                <b>Alpha waves</b> are associated with relaxation and disengagement. This is represented by the blue line.
+                <br/>
+                <b>Beta waves</b> are associated with focused concentration and active thinking. This is represented by the yellow line.
+            </div>
+            <div id="visualization-caption">
+                Recording starts/stops here &#x25BC;
+            </div>
+            <div id="graph-container">
+                <canvas id="graph" width="650" height="400"></canvas>
+                <ul class="graph-labels">
+                    <li id="delta" style="color: rgba(141, 186, 106, 1);">Delta</li>
+                    <!--<li id="theta" style="color: rgba(218,198,0,1);">Theta</li>-->
+                    <li id="alpha" style="color: rgba(128, 201, 232, 1);">Alpha</li>
+                    <li id="beta" style="color: rgba(218, 198, 0, 1);">Beta</li>
+                    <!--<li id="gamma" style="csolor: rgba(3,55,244,1);">Gamma</li>-->
+                </ul>
+                <!--<div id="graph-description">
+                </div>-->
+            </div>
+            <div id="emoji-container" style="display: none">
+                <img class="emoji" id="delta-emoji" src="img/delta.svg">
+                <!--<img class="emoji" id="theta-emoji"  src="img/theta.svg">-->
+                <img class="emoji" id="alpha-emoji" src="img/alpha.svg">
+                <img class="emoji" id="beta-emoji" src="img/beta.svg">
+                <!--<img class="emoji" id="gamma-emoji" src="img/gamma.svg">-->
+            </div>
+            <div id="swirl-container" style="display: none">
+                <canvas id ="swirl_surface" width = '700' height = '700'>
+            </div>
+            <div id="sliders-container" style="display: none">
+                <div class="sliders" id="delta-slide">
+                  <svg width = "2000" height = "200">
+                  <line x1="100" y1="100" x2="1400" y2="100" style="stroke:rgb(200,200,200);stroke-width:5">
+                  </svg>
+                </div>
+                <div class="sliders" id="alpha-slide">
+                  <svg width = "2000" height = "200">
+                  <line x1="100" y1="100" x2="1400" y2="100" style="stroke:rgb(200,200,200);stroke-width:5">
+                  </svg>
+                </div>
+                <div class="sliders" id="beta-slide">
+                  <svg width = "2000" height = "200">
+                  <line x1="100" y1="100" x2="1400" y2="100" style="stroke:rgb(200,200,200);stroke-width:5">
+                  </svg>
+                </div>
+              </div>
+              <div id="colors-container" style="display: none">
+                  <div id="delta-color" class="gradient-olive-green color"></div>
+                  <!--<div id="theta-color" class="gradient-yellow color"></div>-->
+                  <div id="alpha-color" class="gradient-pale-blue color"></div>
+                  <div id="beta-color" class="gradient-yellow color"></div>
+                  <!--<div id="gamma-color" class="gradient-blue color"></div>-->
+              </div>
           </div>
-        <div id="colors-container" style="display: none">
-            <div id="delta-color" class="gradient-olive-green color"></div>
-            <!--<div id="theta-color" class="gradient-yellow color"></div>-->
-            <div id="alpha-color" class="gradient-pale-blue color"></div>
-            <div id="beta-color" class="gradient-yellow color"></div>
-            <!--<div id="gamma-color" class="gradient-blue color"></div>-->
-        </div>
     </div>
     <script src="js/main.js"></script>
+    <script src="js/questions.js"></script>
     <script src="js/graph.js"></script>
     <script src="js/swirling.js"></script>
     <script src="js/record.js"></script>

@@ -46,6 +46,8 @@ var gammaabs = [];
 var concentration = [];
 var mellow = [];
 
+var interval;
+
 io.on('connection', function(socket) {
     console.log('connected');
 
@@ -63,8 +65,10 @@ io.on('connection', function(socket) {
 
     socket.on('connectmuse', function() {
         // send fake data
-        /*socket.emit('muse_connected');
-        setInterval(function(){
+        console.log('conneccttt');
+
+        socket.emit('muse_connected');
+        interval = setInterval(function(){
             var fakedelta = getRandom(0, 1);
             var faketheta = getRandom(0, 1);
             var fakealpha = getRandom(0, 1);
@@ -81,12 +85,12 @@ io.on('connection', function(socket) {
             betaarr.push([fakebeta]);
             gammaarr.push([fakegamma]);
 
-        }, 1000);*/
+        }, 1000);
 
         // send muse data
         // TODO: note any channels that aren't sending data...
 
-        var muse = nodeMuse.connect().Muse;
+        /*var muse = nodeMuse.connect().Muse;
 
         muse.on('connected', function() {
             socket.emit('muse_connected');
@@ -232,7 +236,7 @@ io.on('connection', function(socket) {
 
         muse.on('/muse/elements/experimental/mellow', function(data) {
             mellow.push(data.values);
-        });
+        });*/
     });
 
     socket.on('recordtime', function() {
@@ -246,8 +250,10 @@ io.on('connection', function(socket) {
     });
 
     socket.on('disconnectmuse', function() {
-        nodeMuse.disconnect();
+        // nodeMuse.disconnect();
         socket.emit('muse_disconnect');
+
+        clearInterval(interval);
 
         // save all data to csv file
         downloadData(deltaarr, 'delta');
