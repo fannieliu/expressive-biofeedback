@@ -1,0 +1,183 @@
+/*** instructions ***/
+.instructions {
+    margin: 0 auto;
+    margin-top: 100px;
+    width: 700px;
+    padding: 30px;
+    border: 3px solid #258DB0;
+    background-color: #ffff99;
+}
+
+.instruction-title {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.instruction-header {
+    display: inline-block;
+    opacity: 0.7;
+    vertical-align: center;
+}
+
+.instructions .instruction-header {
+    text-align: left
+}
+
+/*** questions ***/
+.question {
+    opacity: 0.7;
+    font-weight: bold;
+    font-size: 120%;
+    display: block;
+    margin-bottom: 15px;
+    margin-top: 65px;
+}
+
+.answer {
+    opacity: 0.7;
+    margin-bottom: 15px;
+    display: block;
+}
+
+#question-container {
+    margin-top: 30px;
+    margin-right: 30px;
+    width: 500px;
+    vertical-align: top;
+}
+
+/*** edit mode ***/
+#question-response {
+    width: 500px;
+    height: 300px;
+    margin-bottom: 40px;
+}
+
+#edit-visualization-container {
+    display: inline-block;
+    width: 800px;
+    margin-left: 30px;
+    border-left: 1px solid #ccc;
+    padding-left: 32px;
+    padding-top: 30px;
+}
+
+.edit-visualization-description {
+    opacity: 0.7;
+    color: black;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-left: 25px;
+    text-align: left;
+}
+
+.edit-visualization-header {
+    display: inline-block;
+    opacity: 0.7;
+    text-align: left;
+}
+
+#edit-mode-container {
+    display: none;
+    margin-top: 60px;
+}
+
+#edit-next-container {
+    display: block;
+    margin: 0 auto;
+    width: 800px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #ccc;
+}
+
+#edit-answer-container {
+    display: inline-block;
+    margin-top: 30px;
+    margin-right: 30px;
+    width: 500px;
+    vertical-align: top;
+}
+
+/*** buttons ***/
+.instructions .clickable {
+    margin-left: 10px;
+    background-color: #258DB0;
+    color: white;
+}
+
+#next-start-label {
+    opacity: 0.7;
+    font-weight: bold;
+    margin-left: 120px;
+}
+
+#next-edit-label {
+    opacity: 0.7;
+    font-weight: bold;
+    margin-left: 25px;
+}
+
+.next-question {
+    display: inline-block;
+    margin-top: -5px;
+}
+
+/*** checkboxes ***/
+.shareoption {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+input[type="checkbox"] + label {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+/*** survey ***/
+#survey-header {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.survey-question {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+.survey-question-title {
+    display: block;
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 600px;
+    height: 100px;
+}
+
+table {
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.row-radio {
+    width: 100px;
+}
+
+.row-title {
+    width: 200px;
+    text-align: left;
+    height: 30px;
+}
+
+/*** final survey page ***/
+#final-survey-container {
+    width: 500px;
+    margin: 0 auto;
+    margin-top: 100px;
+}
+
+.final-survey-link {
+    font-size: 30px;
+}

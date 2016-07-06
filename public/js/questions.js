@@ -155,14 +155,11 @@ $('#edit-next-survey').click(function() {
 /* $('#edit-back').click(function() {
     // save the checkbox values before moving backward
     saveCurrentCheckbox(current_edit);
-
     current_edit -= 1;
     $('#edit-question').text(question_list[current_edit]['question']);
     $('#edit-answer').text(question_list[current_edit]['answer']);
-
     // set the checkbox value to the right one
     setCurrentCheckbox(current_edit);
-
     if (current_edit == 0) {
         $('#edit-back').css('display', 'none');
     }
@@ -357,10 +354,10 @@ function displayHRV(question_index) {
                 yAxes: [{
                     ticks: {
                         beginAtZero: true,
-                        min: 0,
+                        min: 20,
                         steps: 5,
                         stepValue: 0.2,
-                        max: 1
+                        max: 120
                     }
                 }]
             }
@@ -373,11 +370,21 @@ function getRandom(min, max) {
 }
 
 function startQuestionRecordingHRV() {
-    // TODO RAINA: replace with E4 data
+   	var index = geti();
+   	var ibiarr = [];
     setInterval(function(){
         if (study_started) {
-            var fakehrv = getRandom(0, 1);
-            question_hrv.push(fakehrv);
+            // var fakehrv = getRandom(0, 1);
+            // question_hrv.push(fakehrv);
+
+            //get current data in text file and update array every second
+            $.get("text/ibiData.txt", function(data) {
+      			ibiarr = data.split(",");
+      		});
+
+			index++;
+			//calculate heart rate (beats/min) using interbeat interval
+           	question_hrv.push(60 / ibiarr[index]);
         }
     }, 1000);
 }

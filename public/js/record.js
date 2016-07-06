@@ -41,8 +41,24 @@ function disconnectFromMuse() {
 }
 
 function connectToE4() {
-    // TODO RAINA: fill in code to connect to E4
     $('#connect-message-E4').text('E4 Connected!');
+
+    //start index to get current index when we access heart rate in the text file
+    i = 0;
+    ibiarr = [];
+    setInterval(function(){
+        i++;
+    }, 1000);
+    $.get("text/ibiData.txt", function(data) {
+      	ibiarr = data.split(",");
+    });
+    if(ibiarr[0] !== null){
+    	$('#connect-message-E4').text('E4 Connected!');
+    }
+}
+
+function geti(){
+	return i;
 }
 
 function recordDataWithAudio() {
@@ -111,4 +127,3 @@ function startSwirl() {
         gamma = data;
     });
 };
-
