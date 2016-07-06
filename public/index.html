@@ -23,7 +23,7 @@
             <div id="muse-actions" class="header-item">
                 Muse:
                 <span onclick="connectToMuse()" class="clickable">Connect</span>
-                <span onclick="disconnectFromMuse()" class="clickable">Disconnect</span>
+                <!--<span onclick="disconnectFromMuse()" class="clickable">Disconnect</span>-->
                 <span id="connect-message"></span>
             </div>
             <div id="muse-status" class="header-item">
@@ -32,6 +32,11 @@
                 <span id="leftfront" class="channelstatus">LF</span>
                 <span id="rightfront" class="channelstatus">RF</span>
                 <span id="rightback" class="channelstatus">RB</span>
+            </div>
+            <div id="e4-actions" class="header-item">
+                E4:
+                <span onclick="connectToE4()" class="clickable">Connect</span>
+                <span id="connect-message-E4"></span>
             </div>
         </div>
         <div id="replay-menu">
@@ -116,14 +121,19 @@
                 <span id="edit-answer" class="answer"></span>
             </div>
             <div id="edit-visualization-container">
-                <div id="edit-visualization-description">
+                <div class="edit-visualization-description">
                     <!--<b>Delta waves</b> are associated with deep sleep. This is represented by the green line.
                     <br/>
                     <b>Alpha waves</b> are associated with relaxation and disengagement. This is represented by the blue line.
                     <br/>-->
-                    <b>Beta waves</b> are associated with focused concentration and active thinking. This is represented by the yellow line.
+                    <b>Beta waves</b> are associated with focused concentration and active thinking. This is represented by the line below.
                 </div>
                 <canvas id="eeg-graph" width="300" height="100"></canvas>
+                <br/>
+                <div class="edit-visualization-description">
+                    <b>Heart rate variability</b> description
+                </div>
+                <canvas id="hrv-graph" width="300" height="100"></canvas>
             </div>
         </div>
         <div id="edit-mode-survey-container" style="display: none">

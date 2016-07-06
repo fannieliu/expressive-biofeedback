@@ -10,7 +10,7 @@ function connectToMuse() {
         // startGraphing();
         // startSwirl();
         $('#muse-status').css('display', 'inline-block');
-        $('#connect-message').text('Connected!');
+        $('#connect-message').text('Muse Connected!');
     });
 
     socket.on('muse_uncertain', function() {
@@ -38,6 +38,11 @@ function disconnectFromMuse() {
         $('#connect-message').text('Muse has been disconnected.');
         $('#muse-status').css('display', 'none');
     });
+}
+
+function connectToE4() {
+    // TODO RAINA: fill in code to connect to E4
+    $('#connect-message-E4').text('E4 Connected!');
 }
 
 function recordDataWithAudio() {

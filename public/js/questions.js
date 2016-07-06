@@ -1,12 +1,12 @@
 var question_list = [
     {'question': 'When was the last time you felt deeply moved? What moved you?',
-     'includeEEG': true, 'includeHRV':true
+     'includeEEG': false, 'includeHRV':false
      },
     {'question': 'What are you most looking forward to right now?',
-     'includeEEG': true, 'includeHRV':true
+     'includeEEG': false, 'includeHRV':false
      },
     {'question': 'If you had to pick something\, what would you consider yourself a genius at?',
-     'includeEEG': true, 'includeHRV':true
+     'includeEEG': false, 'includeHRV':false
      },
     /*{'question': 'What’s your earliest memory?'},
     {'question': 'Tell me about a time when you’ve hurt someone else\'s feelings.'},
@@ -37,7 +37,8 @@ $('#next-start').click(function() {
     // update the question text to the first one
     $('.question').text(question_list[0]['question']);
     // start recording
-    startQuestionRecording();
+    startQuestionRecordingEEG();
+    startQuestionRecordingHRV();
     study_started = true;
     var minutes = 60 * 1, display = $('#time');
     startTimer(minutes, display);
@@ -51,8 +52,10 @@ function nextQuestion() {
         // TODO: add 2 min timer before showing next button
         // save the answer to the question
         saveCurrentAnswer();
-        var answer_brain_activity = createAnswerBrainActivity();
-        question_list[current]['brainactivity'] = answer_brain_activity;
+        var answer_eeg = createAnswerEEG();
+        var answer_hrv = createAnswerHRV();
+        question_list[current]['brainactivity'] = answer_eeg;
+        question_list[current]['hrv'] = answer_hrv['hrv'];
         current += 1;
         // ALL QUESTIONS ANSWERED move on
         if (current >= question_list.length) {
@@ -71,12 +74,21 @@ function nextQuestion() {
     }
 };
 
-var question_delta = [];
-function createAnswerBrainActivity() {
+var question_beta = [];
+function createAnswerEEG() {
     var activity = {};
-    activity['delta'] = question_delta;
+    activity['beta'] = question_beta;
     // clear the other arrays
-    question_delta = [];
+    question_beta = [];
+    return activity;
+}
+
+var question_hrv = [];
+function createAnswerHRV() {
+    var activity = {};
+    activity['hrv'] = question_hrv;
+    // clear the other arrays
+    question_hrv = [];
     return activity;
 }
 
@@ -120,9 +132,9 @@ $('#next-survey').click(function() {
     $('#edit-mode-container').css('display', 'inline-block');
     $('#edit-question').text(question_list[0]['question']);
     $('#edit-answer').html(question_list[0]['answer']);
-    displayBrainActivity(0);
-    $('#share-eeg').prop('checked', question_list[0]['includeEEG']);
-    $('#share-hrv').prop('checked', question_list[0]['includeHRV'])
+    displayGraphs(0);
+    // $('#share-eeg').prop('checked', question_list[0]['includeEEG']);
+    // $('#share-hrv').prop('checked', question_list[0]['includeHRV'])
 });
 
 var current_edit = 0;
@@ -158,7 +170,7 @@ $('#edit-next-survey').click(function() {
         $('#edit-next').css('display', 'inline-block');
     }
     eeg_line.clear();
-    displayBrainActivity(current_edit);
+    displayEEG(current_edit);
     // update graph to show the current question's activity
 }); */
 
@@ -183,9 +195,8 @@ function nextEditQuestion() {
     $('#edit-question').text(question_list[current_edit]['question']);
     $('#edit-answer').html(question_list[current_edit]['answer']);
     eeg_line.clear();
-    displayBrainActivity(current_edit);
-
-    // TODO add E4
+    hrv_line.clear();
+    displayGraphs(current_edit);
 }
 
 function saveCurrentCheckbox(question_index) {
@@ -273,23 +284,28 @@ function saveAndClearSurveyResponses(question_index) {
 
 
 /********* VISUALIZATIONS **********/
+function displayGraphs(question_index) {
+    displayEEG(question_index);
+    displayHRV(question_index);
+}
+
 var eeg_line;
-function displayBrainActivity(question_index) {
-    var deltaactivity = question_list[question_index]['brainactivity']['delta'];
+function displayEEG(question_index) {
+    var beta = question_list[question_index]['brainactivity']['beta'];
     // console.log(deltaactivity)
     var eeg_labels = [];
-    for (var i = 0; i < deltaactivity.length; i++) {
+    for (var i = 0; i < beta.length; i++) {
         eeg_labels.push(i.toString());
     }
     var eeg_data = {
         labels: eeg_labels,
         datasets: [
             {
-                label: 'Delta',
+                label: 'EEG',
                 fill: false,
                 pointBackgroundColor: 'rgba(75,192,192,1)',
                 borderColor: 'rgba(75,192,192,1)',
-                data: question_list[question_index]['brainactivity']['delta']
+                data: beta
             }
         ]
     }
@@ -313,21 +329,76 @@ function displayBrainActivity(question_index) {
     });
 }
 
-function startQuestionRecording() {
-    socket.on('delta_relative', function(data) {
-        if (study_started) {
-            question_delta.push(data);
+var hrv_line;
+function displayHRV(question_index) {
+    var hrv = question_list[question_index]['hrv'];
+    var hrv_labels = [];
+    for (var i = 0; i < hrv.length; i++) {
+        hrv_labels.push(i.toString());
+    }
+    var hrv_data = {
+        labels: hrv_labels,
+        datasets: [
+            {
+                label: 'HRV',
+                fill: false,
+                pointBackgroundColor: 'rgba(75,192,192,1)',
+                borderColor: 'rgba(75,192,192,1)',
+                data: question_list[question_index]['hrv']
+            }
+        ]
+    }
+    var ctx = $('#hrv-graph');
+    hrv_line = new Chart(ctx, {
+        type: 'line',
+        data: hrv_data,
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        steps: 5,
+                        stepValue: 0.2,
+                        max: 1
+                    }
+                }]
+            }
         }
+    });
+}
+
+function getRandom(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function startQuestionRecordingHRV() {
+    // TODO RAINA: replace with E4 data
+    setInterval(function(){
+        if (study_started) {
+            var fakehrv = getRandom(0, 1);
+            question_hrv.push(fakehrv);
+        }
+    }, 1000);
+}
+
+function startQuestionRecordingEEG() {
+    socket.on('delta_relative', function(data) {
     });
     socket.on('theta_relative', function(data) {
     });
     socket.on('alpha_relative', function(data) {
     });
     socket.on('beta_relative', function(data) {
+        if (study_started) {
+            question_beta.push(data);
+        }
     });
     socket.on('gamma_relative', function(data) {
     });
 }
+
+
 
 /********* SUBMISSION **********/
 // TODO ADD CHECK FOR EMPTY VALUES
@@ -346,7 +417,7 @@ function saveAllToCSV() {
         var question_data = [];
         for (var j = 0; j < header.length; j++) {
             if (header[j] == 'brainactivity') {
-                question_data.push(question_list[i]['brainactivity']['delta']);
+                question_data.push(question_list[i]['brainactivity']['beta']);
             } else {
                 question_data.push(question_list[i][header[j]]);
             }
