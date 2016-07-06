@@ -354,10 +354,10 @@ function displayHRV(question_index) {
                 yAxes: [{
                     ticks: {
                         beginAtZero: true,
-                        min: 0,
+                        min: 20,
                         steps: 5,
                         stepValue: 0.2,
-                        max: 1
+                        max: 120
                     }
                 }]
             }
