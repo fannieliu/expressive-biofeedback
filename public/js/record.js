@@ -10,7 +10,7 @@ function connectToMuse() {
         // startGraphing();
         // startSwirl();
         $('#muse-status').css('display', 'inline-block');
-        $('#connect-message').text('Connected!');
+        $('#connect-message').text('Muse Connected!');
     });
 
     socket.on('muse_uncertain', function() {
@@ -38,6 +38,25 @@ function disconnectFromMuse() {
         $('#connect-message').text('Muse has been disconnected.');
         $('#muse-status').css('display', 'none');
     });
+}
+
+function connectToE4() {
+    //start index to get current index when we access heart rate in the text file
+    i = 0;
+    ibiarr = [];
+    setInterval(function(){
+        i++;
+    }, 1000);
+    $.get("text/ibiData.txt", function(data) {
+      	ibiarr = data.split(",");
+    });
+    if(ibiarr[0] !== null){
+    	$('#connect-message-E4').text('E4 Connected!');
+    }
+}
+
+function geti(){
+	return i;
 }
 
 function recordDataWithAudio() {
@@ -106,4 +125,3 @@ function startSwirl() {
         gamma = data;
     });
 };
-
