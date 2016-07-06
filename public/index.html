@@ -52,68 +52,361 @@
     </header>
     <div id="container">
         <div id="start-container" class="instructions">
-            <span class="question-title">Sharing Brain Activity Study</span>
+            <span class="instruction-title">Sharing Brain Activity Study</span>
             <br/><br/>
-            <span class="question-header">Thank you for participating in this study. We would like you to answer a few questions about yourself while your brain activity is recorded with the Muse headset. As you answer the questions, you will have the opportunity to choose snapshots of your brain activity to include with your answers. Your answers and brain activity snapshots will be used by others to assess determine how desirable a friend or romantic partner you are.</span>
-            <span id="next-training" class="clickable">Next: Instructions</span>
-        </div>
-        <div id="training-container" class="instructions">
-            <span class="question-title">Instructions</span>
+            <span class="instruction-header">
+                Thank you for participating in this study. We would like you to answer a few questions about yourself while your brain activity (EEG) and heart rate variability (HRV) are being recorded with sensing equipment. After you answer all the questions, you will be able to view the EEG and HRV data that corresponds to each question. You can then choose whether or not to include this data with your response to the question.
+                <br/><br/>
+                Your answers and the data that you include will be used by others to assess determine how desirable a friend or romantic partner you are.
+            </span>
             <br/><br/>
-            <span class="question-header">The experimenter will now setup the Muse headset, which will record your brain activity. Below you can see the setup for answering questions. On the left you will be prompted with 10 different questions. On the right, you will be able to see your brain activity. The experimenter will now explain how to record snapshots of your brain activity. </span>
-            <br/><br/>
-            <span id="next-start-label" class="question-header">
+            <span id="next-start-label" class="instruction-header">
             Do not click 'Start Study' until the experimenter tells you to.
             </span>
             <span id="next-start" class="clickable">Start Study</span>
         </div>
-        <div id="edit-container" class="instructions">
-            <span class="question-title">Edit Brain Activity Snapshots</span>
+        <div id="edit-container" class="instructions" style="display: none">
+            <span class="instruction-title">View Responses and Physiological Data</span>
             <br/><br/>
-            <span class="question-header">You have completed all the questions. You can now edit the the brain activity snapshots you would like to include with you answers. To the left you can see the answers to the different questions. You can view the brain activity that was recorded while you answered each question.</span>
+            <span class="instruction-header">You have completed all the questions. You will now be able to view your responses to the questions alongside your brain activity (EEG) and heart rate variability (HRV) data recorded during each question. You can choose whether or not you would like to include the EEG data, HRV data, both, or neither with your answers. Your answers and the data that you include will be used by others to assess determine how desirable a friend or romantic partner you are. After each question, you will be asked to fill out a survey about your response for that question.</span>
             <br/><br/>
-            <span id="next-edit-label" class="question-header">
-            Do not click until you are done editing, as you will not be able to go back.
-            </span>
-            <span id="next-survey" class="clickable">Finished Editing</span>
+            <span id="next-survey" class="clickable">Next</span>
         </div>
-        <div id="answer-container" class="left-container">
-            <span class="question-header">Your answers to the questions are below.</span>
-            <span id="edit-question" class="question"></span>
-            <span id="edit-answer" class="answer"></span>
-            <div id="question-footer">
-                <div class="question-next">
-                    <span id="edit-back" class="clickable">Previous Question</span>
-                </div>
-                <div class="question-next">
-                    <span id="edit-next" class="clickable">Next Question</span>
-                </div>
-            </div>
-        </div>
-        <div id="question-container" class="left-container">
-            <span class="question-header">Please answer the following questions within the time limit. You may choose to share a snapshot of your brain activity by clicking the buttons to the right.</span>
+        <div id="question-container" style="display: none">
+            <span class="instruction-header">Please answer the following question within the time limit shown below. You will automatically be moved to the next question once the time is up.</span>
             <span id="answer-question" class="question">Question 1: What is your favorite color?</span>
             <textarea id="question-response"></textarea>
             <div id="question-footer">
-                <div id="question-next-label">
+                <!--<div id="instruction-header-label">
                     Please do not click next until you are done answering. You will not be able to go back.
-                </div>
+                </div>-->
                 <!-- include timer? -->
-                <div class="question-next">
-                    <span id="next" class="clickable">Next Question</span>
+                <div class="next-question">
+                    <span id="next" onClick="nextQuestion()" class="clickable">Next Question</span>
+                    <span id="time">01:00</span>
                 </div>
             </div>
         </div>
-        <div id="visualization-container">
-            <div id="visualization-description">
-                <b>Delta waves</b> are associated with deep sleep. This is represented by the green line.
-                <br/>
-                <b>Alpha waves</b> are associated with relaxation and disengagement. This is represented by the blue line.
-                <br/>
-                <b>Beta waves</b> are associated with focused concentration and active thinking. This is represented by the yellow line.
+        <div id="edit-mode-container">
+            <div id="edit-next-container">
+                <span class="edit-visualization-header">
+                    Below, you can view the brain activity (EEG) and heart rate variability (HRV) that were recorded while you were answering this question. Please choose whether or not you would include the EEG, HRV, both, or neither with your response to this question. Your answers and the data that you include will be used by others to assess determine how desirable a friend or romantic partner you are.
+                    <br/><br/>
+                    Please select carefully before clicking "Next" as you will not be able to edit your selection afterwards.
+                </span>
+                <br/><br/>
+                <span class="shareoption">Please select data you would like to include with your response:</span>
+                <input type="checkbox" id="share-eeg" name="share" />
+                <label for="share-eeg">EEG</label>
+                <input type="checkbox" id="share-hrv" name="share" />
+                <label for="share-hrv">HRV</label>
+                <br/><br/>
+                <div id="question-footer">
+                    <!--<div class="next-question">
+                        <span id="edit-back" class="clickable">Previous Question</span>
+                    </div>-->
+                    <div class="next-question">
+                        <span id="edit-next" class="clickable">Next</span>
+                    </div>
+                </div>
             </div>
-            <canvas id="eeg-graph" width="300" height="100"></canvas>
-      </div>
+            <div id="edit-answer-container">
+                <span class="instruction-header">Your answers to the questions are below.</span>
+                <span id="edit-question" class="question"></span>
+                <span id="edit-answer" class="answer"></span>
+            </div>
+            <div id="edit-visualization-container">
+                <div id="edit-visualization-description">
+                    <!--<b>Delta waves</b> are associated with deep sleep. This is represented by the green line.
+                    <br/>
+                    <b>Alpha waves</b> are associated with relaxation and disengagement. This is represented by the blue line.
+                    <br/>-->
+                    <b>Beta waves</b> are associated with focused concentration and active thinking. This is represented by the yellow line.
+                </div>
+                <canvas id="eeg-graph" width="300" height="100"></canvas>
+            </div>
+        </div>
+        <div id="edit-mode-survey-container" style="display: none">
+            <span id="survey-header" class="instruction-header">Please answer the questionnaire below about the previous question.</span>
+            <div class="survey-question">
+                <span class="survey-question-title">
+                    What do you think the EEG data for the previous question says about you?
+                </span>
+                <textarea id="eegmeaning"></textarea>
+            </div>
+            <div class="survey-question">
+                <span class="survey-question-title">
+                    What do you think the HRV data for the previous question says about you?
+                </span>
+                <textarea id="hrvmeaning"></textarea>
+            </div>
+            <div class="survey-question">
+                <span class="survey-question-title">
+                    Why did you choose to show or hide the EEG data?
+                </span>
+                <textarea id="whyeeg"></textarea>
+            </div>
+            <div class="survey-question">
+                <span class="survey-question-title">
+                    Why did you choose to show or hide the HRV data?
+                </span>
+                <textarea id="whyhrv"></textarea>
+            </div>
+            <div class="survey-question">
+                <span class="survey-question-title">
+                    Please rate the extent to which each pair of traits applies to the impression you were trying to give of yourself in the previous question.
+                </span>
+                <table>
+                    <tr>
+                        <td class="row-title"></td>
+                        <td class="row-radio">Strongly Disagree</td>
+                        <td class="row-radio">Disagree</td>
+                        <td class="row-radio">Somewhat Disagree</td>
+                        <td class="row-radio">Neither Agree nor Disagree</td>
+                        <td class="row-radio">Somewhat Agree</td>
+                        <td class="row-radio">Agree</td>
+                        <td class="row-radio">Strongly Agree</td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">Extraverted, enthusiastic</td>
+                        <td class="row-radio"><input type="Radio" class="trait1_1" name="trait1" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait1_2" name="trait1" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait1_3" name="trait1" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait1_4" name="trait1" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait1_5" name="trait1" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait1_6" name="trait1" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait1_7" name="trait1" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">Critical, quarrelsome</td>
+                        <td class="row-radio"><input type="Radio" class="trait2_1" name="trait2" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait2_2" name="trait2" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait2_3" name="trait2" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait2_4" name="trait2" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait2_5" name="trait2" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait2_6" name="trait2" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait2_7" name="trait2" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">Dependable, self-disciplined</td>
+                        <td class="row-radio"><input type="Radio" class="trait3_1" name="trait3" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait3_2" name="trait3" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait3_3" name="trait3" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait3_4" name="trait3" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait3_5" name="trait3" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait3_6" name="trait3" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait3_7" name="trait3" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">Anxious, easily upset</td>
+                        <td class="row-radio"><input type="Radio" class="trait4_1" name="trait4" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait4_2" name="trait4" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait4_3" name="trait4" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait4_4" name="trait4" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait4_5" name="trait4" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait4_6" name="trait4" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait4_7" name="trait4" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">Open to new experiences, complex</td>
+                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait5" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait5" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait5" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait5" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait5" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait5" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait5" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">Reserved, quiet</td>
+                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait6" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait6" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait6" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait6" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait6" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait6" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait6" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">Sympathetic, warm</td>
+                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait7" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait7" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait7" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait7" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait7" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait7" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait7" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">Disorganized, careless</td>
+                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait8" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait8" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait8" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait8" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait8" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait8" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait8" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">Calm, emotionally stable</td>
+                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait9" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait9" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait9" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait9" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait9" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait9" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait9" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">Conventional, uncreative</td>
+                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait10" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait10" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait10" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait10" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait10" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait10" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait10" value="7"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="survey-question">
+                <span class="survey-question-title">
+                    Please rate the extent to which the following statements applies to the impression you were trying to give of yourself in the previous question.
+                </span>
+                <table>
+                    <tr>
+                        <td class="row-title"></td>
+                        <td class="row-radio">Strongly Disagree</td>
+                        <td class="row-radio">Disagree</td>
+                        <td class="row-radio">Somewhat Disagree</td>
+                        <td class="row-radio">Neither Agree nor Disagree</td>
+                        <td class="row-radio">Somewhat Agree</td>
+                        <td class="row-radio">Agree</td>
+                        <td class="row-radio">Strongly Agree</td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">I am capable of planned actions.</td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_1" name="mindattr1" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_2" name="mindattr1" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_3" name="mindattr1" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_4" name="mindattr1" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_5" name="mindattr1" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_6" name="mindattr1" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_7" name="mindattr1" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">I have complex feelings.</td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_1" name="mindattr2" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_2" name="mindattr2" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_3" name="mindattr2" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_4" name="mindattr2" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_5" name="mindattr2" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_6" name="mindattr2" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_7" name="mindattr2" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">I can engage in a great deal of thought.</td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_1" name="mindattr3" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_2" name="mindattr3" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_3" name="mindattr3" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_4" name="mindattr3" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_5" name="mindattr3" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_6" name="mindattr3" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_7" name="mindattr3" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">I can experience pain.</td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_1" name="mindattr4" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_2" name="mindattr4" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_3" name="mindattr4" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_4" name="mindattr4" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_5" name="mindattr4" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_6" name="mindattr4" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_7" name="mindattr4" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">I am capable of doing things on purpose.</td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr5" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr5" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr5" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr5" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr5" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr5" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr5" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">I am capable of emotion</td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr6" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr6" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr6" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr6" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr6" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr6" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr6" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">I have goals.</td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr7" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr7" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr7" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr7" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr7" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr7" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr7" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">I am highly conscious.</td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr8" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr8" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr8" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr8" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr8" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr8" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr8" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">I can experience pleasure.</td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr9" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr9" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr9" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr9" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr9" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr9" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr9" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="row-title">I have a good memory.</td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr10" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr10" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr10" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr10" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr10" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr10" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr10" value="7"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="next-question">
+                <span id="edit-next-survey" class="clickable">Next</span>
+            </div>
+        </div>
+        <div id="submission-container" style="display: none" class="instructions">
+            <span class="instruction-title">Submission</span>
+            <br/><br/>
+            <span class="instruction-header">
+               You have finished reviewing all of your responses and physiological data! Please press the submit button to submit your responses. This will download a csv file of your responses to this computer.
+            </span>
+            <br/><br/>
+            <span id="submit-final" class="clickable">Submit</span>
+        </div>
+        <div id="final-survey-container" style="display: none">
+            <span class="final-survey-instructions">
+                You have now finished this part of the study! For the final part of this study, we would like you to fill out a short survey. Please click on the link below:
+            </span>
+            <br/><br/>
+            <br/><br/>
+            <span class="final-survey-link"><a href="http://cmu.qualtrics.com/SE/?SID=SV_3Qco9BUutVU8uaN">Final Survey Link</a></span>
+        </div>
     </div>
     <script src="js/main.js"></script>
     <script src="js/questions.js"></script>
