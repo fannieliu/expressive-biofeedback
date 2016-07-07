@@ -33,11 +33,11 @@
                 <span id="rightfront" class="channelstatus">RF</span>
                 <span id="rightback" class="channelstatus">RB</span>
             </div>
-            <div id="e4-actions" class="header-item">
+            <!--<div id="e4-actions" class="header-item">
                 E4:
                 <span onclick="connectToE4()" class="clickable">Connect</span>
                 <span id="connect-message-E4"></span>
-            </div>
+            </div>-->
         </div>
         <div id="replay-menu">
             <div id="upload-csv" class="header-item">
@@ -87,8 +87,10 @@
                 </div>-->
                 <!-- include timer? -->
                 <div class="next-question">
-                    <span id="next" onClick="nextQuestion()" class="clickable">Next Question</span>
-                    <span id="time">01:00</span>
+                     <!-- uncomment for testing
+                     <span id="next" onClick="nextQuestion()" class="clickable">Next Question</span>
+                    -->
+                    <span id="time">02:00</span>
                 </div>
             </div>
         </div>
@@ -134,6 +136,7 @@
                     <b>Heart rate variability</b> description
                 </div>
                 <canvas id="hrv-graph" width="300" height="100"></canvas>
+                <br/><br/>
             </div>
         </div>
         <div id="edit-mode-survey-container" style="display: none">
@@ -142,25 +145,25 @@
                 <span class="survey-question-title">
                     What do you think the EEG data for the previous question says about you?
                 </span>
-                <textarea id="eegmeaning"></textarea>
+                <textarea class="inside" id="eegmeaning"></textarea>
             </div>
             <div class="survey-question">
                 <span class="survey-question-title">
                     What do you think the HRV data for the previous question says about you?
                 </span>
-                <textarea id="hrvmeaning"></textarea>
+                <textarea class="inside" id="hrvmeaning"></textarea>
             </div>
             <div class="survey-question">
                 <span class="survey-question-title">
                     Why did you choose to show or hide the EEG data?
                 </span>
-                <textarea id="whyeeg"></textarea>
+                <textarea class="inside" id="whyeeg"></textarea>
             </div>
             <div class="survey-question">
                 <span class="survey-question-title">
                     Why did you choose to show or hide the HRV data?
                 </span>
-                <textarea id="whyhrv"></textarea>
+                <textarea class="inside" id="whyhrv"></textarea>
             </div>
             <div class="survey-question">
                 <span class="survey-question-title">
@@ -179,103 +182,103 @@
                     </tr>
                     <tr>
                         <td class="row-title">Extraverted, enthusiastic</td>
-                        <td class="row-radio"><input type="Radio" class="trait1_1" name="trait1" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="trait1_2" name="trait1" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="trait1_3" name="trait1" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="trait1_4" name="trait1" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="trait1_5" name="trait1" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="trait1_6" name="trait1" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="trait1_7" name="trait1" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait1" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait1" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait1" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait1" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait1" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait1" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait1" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">Critical, quarrelsome</td>
-                        <td class="row-radio"><input type="Radio" class="trait2_1" name="trait2" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="trait2_2" name="trait2" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="trait2_3" name="trait2" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="trait2_4" name="trait2" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="trait2_5" name="trait2" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="trait2_6" name="trait2" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="trait2_7" name="trait2" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait2" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait2" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait2" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait2" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait2" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait2" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait2" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">Dependable, self-disciplined</td>
-                        <td class="row-radio"><input type="Radio" class="trait3_1" name="trait3" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="trait3_2" name="trait3" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="trait3_3" name="trait3" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="trait3_4" name="trait3" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="trait3_5" name="trait3" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="trait3_6" name="trait3" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="trait3_7" name="trait3" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait3" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait3" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait3" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait3" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait3" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait3" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait3" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">Anxious, easily upset</td>
-                        <td class="row-radio"><input type="Radio" class="trait4_1" name="trait4" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="trait4_2" name="trait4" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="trait4_3" name="trait4" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="trait4_4" name="trait4" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="trait4_5" name="trait4" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="trait4_6" name="trait4" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="trait4_7" name="trait4" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait4" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait4" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait4" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait4" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait4" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait4" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait4" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">Open to new experiences, complex</td>
-                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait5" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait5" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait5" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait5" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait5" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait5" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait5" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait5" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait5" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait5" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait5" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait5" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait5" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="radio-survey" name="trait5" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">Reserved, quiet</td>
-                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait6" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait6" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait6" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait6" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait6" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait6" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait6" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_1 radio-survey" name="trait6" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_2 radio-survey" name="trait6" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_3 radio-survey" name="trait6" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_4 radio-survey" name="trait6" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_5 radio-survey" name="trait6" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_6 radio-survey" name="trait6" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_7 radio-survey" name="trait6" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">Sympathetic, warm</td>
-                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait7" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait7" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait7" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait7" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait7" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait7" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait7" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_1 radio-survey" name="trait7" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_2 radio-survey" name="trait7" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_3 radio-survey" name="trait7" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_4 radio-survey" name="trait7" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_5 radio-survey" name="trait7" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_6 radio-survey" name="trait7" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_7 radio-survey" name="trait7" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">Disorganized, careless</td>
-                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait8" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait8" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait8" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait8" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait8" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait8" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait8" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_1 radio-survey" name="trait8" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_2 radio-survey" name="trait8" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_3 radio-survey" name="trait8" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_4 radio-survey" name="trait8" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_5 radio-survey" name="trait8" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_6 radio-survey" name="trait8" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_7 radio-survey" name="trait8" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">Calm, emotionally stable</td>
-                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait9" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait9" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait9" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait9" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait9" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait9" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait9" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_1 radio-survey" name="trait9" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_2 radio-survey" name="trait9" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_3 radio-survey" name="trait9" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_4 radio-survey" name="trait9" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_5 radio-survey" name="trait9" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_6 radio-survey" name="trait9" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_7 radio-survey" name="trait9" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">Conventional, uncreative</td>
-                        <td class="row-radio"><input type="Radio" class="trait5_1" name="trait10" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_2" name="trait10" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_3" name="trait10" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_4" name="trait10" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_5" name="trait10" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_6" name="trait10" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="trait5_7" name="trait10" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_1 radio-survey" name="trait10" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_2 radio-survey" name="trait10" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_3 radio-survey" name="trait10" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_4 radio-survey" name="trait10" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_5 radio-survey" name="trait10" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_6 radio-survey" name="trait10" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="trait5_7 radio-survey" name="trait10" value="7"></td>
                     </tr>
                 </table>
             </div>
@@ -296,103 +299,103 @@
                     </tr>
                     <tr>
                         <td class="row-title">I am capable of planned actions.</td>
-                        <td class="row-radio"><input type="Radio" class="mindattr1_1" name="mindattr1" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr1_2" name="mindattr1" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr1_3" name="mindattr1" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr1_4" name="mindattr1" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr1_5" name="mindattr1" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr1_6" name="mindattr1" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr1_7" name="mindattr1" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_1 radio-survey" name="mindattr1" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_2 radio-survey" name="mindattr1" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_3 radio-survey" name="mindattr1" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_4 radio-survey" name="mindattr1" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_5 radio-survey" name="mindattr1" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_6 radio-survey" name="mindattr1" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr1_7 radio-survey" name="mindattr1" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">I have complex feelings.</td>
-                        <td class="row-radio"><input type="Radio" class="mindattr2_1" name="mindattr2" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr2_2" name="mindattr2" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr2_3" name="mindattr2" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr2_4" name="mindattr2" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr2_5" name="mindattr2" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr2_6" name="mindattr2" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr2_7" name="mindattr2" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_1 radio-survey" name="mindattr2" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_2 radio-survey" name="mindattr2" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_3 radio-survey" name="mindattr2" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_4 radio-survey" name="mindattr2" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_5 radio-survey" name="mindattr2" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_6 radio-survey" name="mindattr2" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr2_7 radio-survey" name="mindattr2" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">I can engage in a great deal of thought.</td>
-                        <td class="row-radio"><input type="Radio" class="mindattr3_1" name="mindattr3" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr3_2" name="mindattr3" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr3_3" name="mindattr3" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr3_4" name="mindattr3" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr3_5" name="mindattr3" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr3_6" name="mindattr3" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr3_7" name="mindattr3" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_1 radio-survey" name="mindattr3" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_2 radio-survey" name="mindattr3" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_3 radio-survey" name="mindattr3" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_4 radio-survey" name="mindattr3" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_5 radio-survey" name="mindattr3" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_6 radio-survey" name="mindattr3" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr3_7 radio-survey" name="mindattr3" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">I can experience pain.</td>
-                        <td class="row-radio"><input type="Radio" class="mindattr4_1" name="mindattr4" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr4_2" name="mindattr4" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr4_3" name="mindattr4" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr4_4" name="mindattr4" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr4_5" name="mindattr4" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr4_6" name="mindattr4" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr4_7" name="mindattr4" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_1 radio-survey" name="mindattr4" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_2 radio-survey" name="mindattr4" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_3 radio-survey" name="mindattr4" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_4 radio-survey" name="mindattr4" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_5 radio-survey" name="mindattr4" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_6 radio-survey" name="mindattr4" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr4_7 radio-survey" name="mindattr4" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">I am capable of doing things on purpose.</td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr5" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr5" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr5" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr5" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr5" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr5" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr5" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1 radio-survey" name="mindattr5" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2 radio-survey" name="mindattr5" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3 radio-survey" name="mindattr5" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4 radio-survey" name="mindattr5" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5 radio-survey" name="mindattr5" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6 radio-survey" name="mindattr5" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7 radio-survey" name="mindattr5" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">I am capable of emotion</td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr6" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr6" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr6" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr6" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr6" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr6" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr6" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1 radio-survey" name="mindattr6" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2 radio-survey" name="mindattr6" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3 radio-survey" name="mindattr6" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4 radio-survey" name="mindattr6" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5 radio-survey" name="mindattr6" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6 radio-survey" name="mindattr6" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7 radio-survey" name="mindattr6" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">I have goals.</td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr7" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr7" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr7" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr7" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr7" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr7" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr7" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1 radio-survey" name="mindattr7" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2 radio-survey" name="mindattr7" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3 radio-survey" name="mindattr7" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4 radio-survey" name="mindattr7" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5 radio-survey" name="mindattr7" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6 radio-survey" name="mindattr7" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7 radio-survey" name="mindattr7" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">I am highly conscious.</td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr8" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr8" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr8" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr8" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr8" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr8" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr8" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1 radio-survey" name="mindattr8" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2 radio-survey" name="mindattr8" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3 radio-survey" name="mindattr8" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4 radio-survey" name="mindattr8" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5 radio-survey" name="mindattr8" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6 radio-survey" name="mindattr8" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7 radio-survey" name="mindattr8" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">I can experience pleasure.</td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr9" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr9" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr9" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr9" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr9" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr9" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr9" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1 radio-survey" name="mindattr9" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2 radio-survey" name="mindattr9" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3 radio-survey" name="mindattr9" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4 radio-survey" name="mindattr9" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5 radio-survey" name="mindattr9" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6 radio-survey" name="mindattr9" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7 radio-survey" name="mindattr9" value="7"></td>
                     </tr>
                     <tr>
                         <td class="row-title">I have a good memory.</td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_1" name="mindattr10" value="1"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_2" name="mindattr10" value="2"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_3" name="mindattr10" value="3"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_4" name="mindattr10" value="4"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_5" name="mindattr10" value="5"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_6" name="mindattr10" value="6"></td>
-                        <td class="row-radio"><input type="Radio" class="mindattr5_7" name="mindattr10" value="7"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_1 radio-survey" name="mindattr10" value="1"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_2 radio-survey" name="mindattr10" value="2"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_3 radio-survey" name="mindattr10" value="3"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_4 radio-survey" name="mindattr10" value="4"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_5 radio-survey" name="mindattr10" value="5"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_6 radio-survey" name="mindattr10" value="6"></td>
+                        <td class="row-radio"><input type="Radio" class="mindattr5_7 radio-survey" name="mindattr10" value="7"></td>
                     </tr>
                 </table>
             </div>

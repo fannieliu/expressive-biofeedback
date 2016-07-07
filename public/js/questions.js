@@ -1,32 +1,51 @@
 var question_list = [
-    {'question': 'When was the last time you felt deeply moved? What moved you?',
-     'includeEEG': false, 'includeHRV':false
-     },
-    {'question': 'What are you most looking forward to right now?',
-     'includeEEG': false, 'includeHRV':false
-     },
-    {'question': 'If you had to pick something\, what would you consider yourself a genius at?',
-     'includeEEG': false, 'includeHRV':false
-     },
-    /*{'question': 'What’s your earliest memory?'},
+    {'question': 'When was the last time you felt deeply moved? What moved you?'},
+    {'question': 'What are you most looking forward to right now?'},
+    {'question': 'If you had to pick something\, what would you consider yourself a genius at?'},
+    {'question': 'What is the greatest accomplishment of your life?'},
     {'question': 'Tell me about a time when you’ve hurt someone else\'s feelings.'},
     {'question': 'When did you last cry in front of another person? By yourself?'},
     {'question': 'Share a time when you experienced failure.'},
-    {'question': 'If you were given a day off on short notice, what would you do?'},
     {'question': 'Tell me about a time that made you question your beliefs or who you are as a person.'},
     {'question': 'What would you do in the event of a zombie apocalypse?'},
     {'question': 'If you had a million dollars to launch an idea that would change the world, what would it be?'},
-    /*{'question': 'Share a vivid negative emotional memory that you have.'},
-    {'question': 'What would you do in the event of a zombie apocolypse?'},
-    {'question': 'List all the uses of a ____.'},
-    {'question': 'What would you do if it was your last day on Earth?'},
-    {'question': 'If you had a million dollars, how would you change the world?'},
-    {'question': 'If you had a million dollars to launch your best entrepreneurial idea, what would it be?'},
-    {'question': 'What do you think you were in a past life and why?'},
-    {'question': 'If I was talking to your best friend, what would they say you need to work on?'},
-    {'question': 'What\'s been going on lately?'},
-    {'question': 'randommm'}*/
 ];
+
+var mental_cleansing_questions = [
+    {'question': 'If you were given a day off on short notice, what would you do?'},
+    {'question': 'What’s your earliest memory?'}
+]
+
+/********* RANDOMLY GENERATE QUESTIONS *********/
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+function shuffleQuestions(){
+    var question_list_shuffled = shuffle(question_list);
+    // add mental cleansing question 1
+    question_list_shuffled.splice(3, 0, mental_cleansing_questions[0]);
+    question_list_shuffled.join();
+    // add mental cleansing question 2
+    question_list_shuffled.splice(7, 0, mental_cleansing_questions[1]);
+    question_list_shuffled.join();
+    return question_list_shuffled;
+}
 
 /********* START STUDY QUESTIONS **********/
 var study_started = false;
@@ -34,13 +53,14 @@ var study_started = false;
 $('#next-start').click(function() {
     $('#start-container').css('display', 'none');
     $('#question-container').css('display', 'inline-block');
+    question_list = shuffleQuestions();
     // update the question text to the first one
     $('.question').text(question_list[0]['question']);
     // start recording
-    startQuestionRecordingEEG();
-    startQuestionRecordingHRV();
     study_started = true;
-    var minutes = 60 * 1, display = $('#time');
+    startQuestionRecordingHRV();
+    startQuestionRecordingEEG();
+    var minutes = 60 * 2, display = $('#time');
     startTimer(minutes, display);
 })
 
@@ -146,10 +166,12 @@ $('#edit-next').click(function() {
 $('#edit-next-survey').click(function() {
     // should go to the next question
     // save all the survey answers and clear
-    saveAndClearSurveyResponses(current_edit);
+    var is_all_filled = saveAndClearSurveyResponses(current_edit);
     // display edit questions
-    displayEditModeFromSurvey();
-    nextEditQuestion();
+    if (is_all_filled) {
+        displayEditModeFromSurvey();
+        nextEditQuestion();
+    }
 })
 
 /* $('#edit-back').click(function() {
@@ -191,8 +213,10 @@ function nextEditQuestion() {
 
     $('#edit-question').text(question_list[current_edit]['question']);
     $('#edit-answer').html(question_list[current_edit]['answer']);
-    eeg_line.clear();
-    hrv_line.clear();
+    //eeg_line.clear();
+    eeg_line.destroy();
+    //hrv_line.clear();
+    hrv_line.destroy();
     displayGraphs(current_edit);
 }
 
@@ -202,8 +226,8 @@ function saveCurrentCheckbox(question_index) {
 }
 
 function setCurrentCheckbox(question_index) {
-    $('#share-eeg').prop('checked', question_list[question_index]['includeEEG']);
-    $('#share-hrv').prop('checked', question_list[question_index]['includeHRV']);
+    $('#share-eeg').prop('checked', false);
+    $('#share-hrv').prop('checked', false);
 }
 
 /********* QUESTIONNAIRE **********/
@@ -218,65 +242,96 @@ function displayEditModeFromSurvey() {
 }
 
 function saveAndClearSurveyResponses(question_index) {
+    // check text area input
+    var has_empty = false;
+    $('textarea.inside').each(function(){
+        if (has_empty) {
+            return;
+        }
+        if (this.value == '') {
+            alert("Please answer all of the questions.")
+            has_empty = true;
+        }
+    });
+    if (has_empty) {
+        return;
+    }
+
     // eeg meaning
     question_list[question_index]['eegmeaning'] = $('textarea#eegmeaning').val().replace(/\n\r?/g, '<br/>');
-    $('textarea#eegmeaning').val('');
-
     // hrv meaning
     question_list[question_index]['hrvmeaning'] = $('textarea#hrvmeaning').val().replace(/\n\r?/g, '<br/>');
-    $('textarea#hrvmeaning').val('');
-
     // why eeg show/hide
     question_list[question_index]['whyeeg'] = $('textarea#whyeeg').val().replace(/\n\r?/g, '<br/>');
-    $('textarea#whyeeg').val('');
-
     // why hrv show/hide
     question_list[question_index]['whyhrv'] = $('textarea#whyhrv').val().replace(/\n\r?/g, '<br/>');
-    $('textarea#whyhrv').val('');
 
     // traits
+    $('input.radio-survey').each(function(){
+        if (has_empty) {
+            return;
+        }
+        var name = $(this).attr('name');
+        if (!$('input[name=' + name + ']:checked').length) {
+            alert("Please answer all of the questions.");
+            has_empty = true;
+        }
+    });
+    if (has_empty) {
+        return;
+    }
     question_list[question_index]['trait1'] = $('input[name=trait1]:checked').val();
-    $('input[name=trait1]').attr('checked', false);
     question_list[question_index]['trait2'] = $('input[name=trait2]:checked').val();;
-    $('input[name=trait2]').attr('checked', false);
     question_list[question_index]['trait3'] = $('input[name=trait3]:checked').val();;
-    $('input[name=trait3]').attr('checked', false);
     question_list[question_index]['trait4'] = $('input[name=trait4]:checked').val();;
-    $('input[name=trait4]').attr('checked', false);
     question_list[question_index]['trait5'] = $('input[name=trait5]:checked').val();;
-    $('input[name=trait5]').attr('checked', false);
     question_list[question_index]['trait6'] = $('input[name=trait6]:checked').val();;
-    $('input[name=trait6]').attr('checked', false);
     question_list[question_index]['trait7'] = $('input[name=trait7]:checked').val();;
-    $('input[name=trait7]').attr('checked', false);
     question_list[question_index]['trait8'] = $('input[name=trait8]:checked').val();;
-    $('input[name=trait8]').attr('checked', false);
     question_list[question_index]['trait9'] = $('input[name=trait9]:checked').val();;
-    $('input[name=trait9]').attr('checked', false);
     question_list[question_index]['trait10'] = $('input[name=trait10]:checked').val();;
-    $('input[name=trait10]').attr('checked', false);
 
     // mind attr
     question_list[question_index]['mindattr1'] = $('input[name=mindattr1]:checked').val();
-    $('input[name=mindattr1]').attr('checked', false);
     question_list[question_index]['mindattr2'] = $('input[name=mindattr2]:checked').val();;
-    $('input[name=mindattr2]').attr('checked', false);
     question_list[question_index]['mindattr3'] = $('input[name=mindattr3]:checked').val();;
-    $('input[name=mindattr3]').attr('checked', false);
     question_list[question_index]['mindattr4'] = $('input[name=mindattr4]:checked').val();;
-    $('input[name=mindattr4]').attr('checked', false);
     question_list[question_index]['mindattr5'] = $('input[name=mindattr5]:checked').val();;
-    $('input[name=mindattr5]').attr('checked', false);
     question_list[question_index]['mindattr6'] = $('input[name=mindattr6]:checked').val();;
-    $('input[name=mindattr6]').attr('checked', false);
     question_list[question_index]['mindattr7'] = $('input[name=mindattr7]:checked').val();;
-    $('input[name=mindattr7]').attr('checked', false);
     question_list[question_index]['mindattr8'] = $('input[name=mindattr8]:checked').val();;
-    $('input[name=mindattr8]').attr('checked', false);
     question_list[question_index]['mindattr9'] = $('input[name=mindattr9]:checked').val();;
-    $('input[name=mindattr9]').attr('checked', false);
     question_list[question_index]['mindattr10'] = $('input[name=mindattr10]:checked').val();;
+
+    // CLEAR EVERYTHING
+    $('textarea#eegmeaning').val('');
+    $('textarea#hrvmeaning').val('');
+    $('textarea#whyeeg').val('');
+    $('textarea#whyhrv').val('');
+
+    $('input[name=trait1]').attr('checked', false);
+    $('input[name=trait2]').attr('checked', false);
+    $('input[name=trait3]').attr('checked', false);
+    $('input[name=trait4]').attr('checked', false);
+    $('input[name=trait5]').attr('checked', false);
+    $('input[name=trait6]').attr('checked', false);
+    $('input[name=trait7]').attr('checked', false);
+    $('input[name=trait8]').attr('checked', false);
+    $('input[name=trait9]').attr('checked', false);
+    $('input[name=trait10]').attr('checked', false);
+
+    $('input[name=mindattr1]').attr('checked', false);
+    $('input[name=mindattr2]').attr('checked', false);
+    $('input[name=mindattr3]').attr('checked', false);
+    $('input[name=mindattr4]').attr('checked', false);
+    $('input[name=mindattr5]').attr('checked', false);
+    $('input[name=mindattr6]').attr('checked', false);
+    $('input[name=mindattr7]').attr('checked', false);
+    $('input[name=mindattr8]').attr('checked', false);
+    $('input[name=mindattr9]').attr('checked', false);
     $('input[name=mindattr10]').attr('checked', false);
+
+    return true;
 }
 
 
@@ -320,6 +375,9 @@ function displayEEG(question_index) {
                         stepValue: 0.2,
                         max: 1
                     }
+                }],
+                xAxes: [{
+                    display: false
                 }]
             }
         }
@@ -339,8 +397,8 @@ function displayHRV(question_index) {
             {
                 label: 'HRV',
                 fill: false,
-                pointBackgroundColor: 'rgba(75,192,192,1)',
-                borderColor: 'rgba(75,192,192,1)',
+                pointBackgroundColor: 'rgba(222, 74, 74, 1)',
+                borderColor: 'rgba(222, 74, 74, 1)',
                 data: question_list[question_index]['hrv']
             }
         ]
@@ -359,6 +417,9 @@ function displayHRV(question_index) {
                         stepValue: 0.2,
                         max: 120
                     }
+                }],
+                xAxes: [{
+                    display: false
                 }]
             }
         }
@@ -370,21 +431,17 @@ function getRandom(min, max) {
 }
 
 function startQuestionRecordingHRV() {
-   	var index = geti();
+   	var index = 0;
    	var ibiarr = [];
     setInterval(function(){
         if (study_started) {
-            // var fakehrv = getRandom(0, 1);
-            // question_hrv.push(fakehrv);
-
-            //get current data in text file and update array every second
+            // get current data in text file and update array every second
             $.get("text/ibiData.txt", function(data) {
-      			ibiarr = data.split(",");
-      		});
-
-			index++;
-			//calculate heart rate (beats/min) using interbeat interval
-           	question_hrv.push(60 / ibiarr[index]);
+                ibiarr = data.split(",");
+            }).done(function() {
+                question_hrv.push(60 / ibiarr[index]);
+                index++;
+            });
         }
     }, 1000);
 }
