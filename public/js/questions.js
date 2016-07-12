@@ -454,13 +454,14 @@ function startQuestionRecordingEEG() {
     socket.on('alpha_relative', function(data) {
     });
     socket.on('beta_relative', function(data) {
-        if (study_started) {
-            question_beta.push(data);
-        }
     });
     socket.on('gamma_relative', function(data) {
     });
-}
+    socket.on('beta_session', function(data) {
+        if (study_started) {
+            question_beta.push(data);
+        }
+    });}
 
 
 

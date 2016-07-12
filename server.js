@@ -67,7 +67,7 @@ io.on('connection', function(socket) {
         // send fake data
         console.log('conneccttt');
 
-        socket.emit('muse_connected');
+        /*socket.emit('muse_connected');
         interval = setInterval(function(){
             var fakedelta = getRandom(0, 1);
             var faketheta = getRandom(0, 1);
@@ -85,12 +85,12 @@ io.on('connection', function(socket) {
             betaarr.push([fakebeta]);
             gammaarr.push([fakegamma]);
 
-        }, 1000);
+        }, 1000);*/
 
         // send muse data
         // TODO: note any channels that aren't sending data...
 
-        /*var muse = nodeMuse.connect().Muse;
+        var muse = nodeMuse.connect().Muse;
 
         muse.on('connected', function() {
             socket.emit('muse_connected');
@@ -117,6 +117,9 @@ io.on('connection', function(socket) {
         var betalast = Date.now();
         var gammanow = Date.now();
         var gammalast = Date.now();
+
+        var betasnow = Date.now();
+        var betaslast = Date.now();
 
         // get relative data from muse, these values will be between 0 and 1
         // see: http://developer.choosemuse.com/research-tools/available-data#Relative_Band_Powers
@@ -174,6 +177,18 @@ io.on('connection', function(socket) {
                 gammalast = gammanow;
                 gammaarr_sec.push([gammadata]);
                 socket.emit('gamma_relative', averageChannelData(data));
+            }
+        });
+
+        muse.on('/muse/elements/beta_session_score', function(data){
+            betasnow = Date.now();
+            var betasdata = averageChannelData(data);
+            // betaarr.push(data.values);
+            if (checkTime(betasnow, betaslast)) {
+                console.log(betasdata);
+                betaslast = betasnow;
+                // betaarr_sec.push([betadata]);
+                socket.emit('beta_session', averageChannelData(data));
             }
         });
 
@@ -236,7 +251,7 @@ io.on('connection', function(socket) {
 
         muse.on('/muse/elements/experimental/mellow', function(data) {
             mellow.push(data.values);
-        });*/
+        });
     });
 
     socket.on('recordtime', function() {
