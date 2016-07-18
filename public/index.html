@@ -60,9 +60,7 @@
             <span class="instruction-title">Sharing Brain Activity Study</span>
             <br/><br/>
             <span class="instruction-header">
-                Thank you for participating in this study. We would like you to answer a few questions about yourself while your brain activity (EEG) and heart rate variability (HRV) are being recorded with sensing equipment. After you answer all the questions, you will be able to view the EEG and HRV data that corresponds to each question. You can then choose whether or not to include this data with your response to the question.
-                <br/><br/>
-                Your answers and the data that you include will be used by others to assess determine how desirable a friend or romantic partner you are.
+                Thank you for participating in this study. We would like you to answer a few questions and listen to an audio clip while your brain activity (EEG), heart rate variability (HRV), and electrodermal activity (EDA) are being recorded with sensing equipment. We are interested in seeing how different tasks affect physiological activity.
             </span>
             <br/><br/>
             <span id="next-start-label" class="instruction-header">
@@ -80,17 +78,22 @@
         <div id="question-container" style="display: none">
             <span class="instruction-header">Please answer the following question within the time limit shown below. You will automatically be moved to the next question once the time is up.</span>
             <span id="answer-question" class="question">Question 1: What is your favorite color?</span>
-            <textarea id="question-response"></textarea>
+            <!-- <textarea id="question-response"></textarea> -->
+            <br/><br/>
             <div id="question-footer">
                 <!--<div id="instruction-header-label">
                     Please do not click next until you are done answering. You will not be able to go back.
                 </div>-->
                 <!-- include timer? -->
+                <div id="audio-player" style="display: none">
+                    <audio id="music" src="audio/deemo_dream.mp3"></audio>
+                    <br/><br/>
+                </div>
                 <div class="next-question">
-                     <!-- uncomment for testing
+                     <!-- uncomment for testing -->
                      <span id="next" onClick="nextQuestion()" class="clickable">Next Question</span>
-                    -->
-                    <span id="time">02:00</span>
+                    <!---->
+                    <span id="time">00:30</span>
                 </div>
             </div>
         </div>
@@ -414,11 +417,8 @@
         </div>
         <div id="final-survey-container" style="display: none">
             <span class="final-survey-instructions">
-                You have now finished this part of the study! For the final part of this study, we would like you to fill out a short survey. Please click on the link below:
+                Your data has been downloaded as a CSV file. You have now finished the study. Thank you!
             </span>
-            <br/><br/>
-            <br/><br/>
-            <span class="final-survey-link"><a href="http://cmu.qualtrics.com/SE/?SID=SV_3Qco9BUutVU8uaN">Final Survey Link</a></span>
         </div>
     </div>
     <script src="js/main.js"></script>

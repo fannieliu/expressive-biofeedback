@@ -67,7 +67,7 @@ io.on('connection', function(socket) {
         // send fake data
         console.log('conneccttt');
 
-        /*socket.emit('muse_connected');
+        socket.emit('muse_connected');
         interval = setInterval(function(){
             var fakedelta = getRandom(0, 1);
             var faketheta = getRandom(0, 1);
@@ -85,7 +85,9 @@ io.on('connection', function(socket) {
             betaarr.push([fakebeta]);
             gammaarr.push([fakegamma]);
 
-        }, 1000);*/
+        }, 1000);
+
+        /*
 
         // send muse data
         // TODO: note any channels that aren't sending data...
@@ -251,7 +253,7 @@ io.on('connection', function(socket) {
 
         muse.on('/muse/elements/experimental/mellow', function(data) {
             mellow.push(data.values);
-        });
+        });*/
     });
 
     socket.on('recordtime', function() {

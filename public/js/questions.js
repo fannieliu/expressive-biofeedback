@@ -1,51 +1,29 @@
 var question_list = [
-    {'question': 'When was the last time you felt deeply moved? What moved you?'},
-    {'question': 'What are you most looking forward to right now?'},
-    {'question': 'If you had to pick something\, what would you consider yourself a genius at?'},
-    {'question': 'What is the greatest accomplishment of your life?'},
-    {'question': 'Tell me about a time when you’ve hurt someone else\'s feelings.'},
-    {'question': 'When did you last cry in front of another person? By yourself?'},
-    {'question': 'Share a time when you experienced failure.'},
-    {'question': 'Tell me about a time that made you question your beliefs or who you are as a person.'},
-    {'question': 'What would you do in the event of a zombie apocalypse?'},
-    {'question': 'If you had a million dollars to launch an idea that would change the world, what would it be?'},
+    {'question': 'This is a baseline test. Please clear your mind and do not make any sudden movements so that we can record your baseline physiological activity.',
+     'time': .5,
+     'timedisplay': '00:30'
+    },
+    {'question': 'Please write out all the uses of a paper clip on the paper provided.',
+     'time': 2,
+     'timedisplay': '02:00'
+    },
+    {'question': 'Please close your eyes and listen to this audio clip. You may open your eyes when the audio stops playing. You will automatically be moved to the next question afterwards.',
+     'time': 2,
+     'timedisplay': '02:00'
+    },
+    {'question': 'Please write out your answer to the following question on the paper provided: What is the greatest accomplishment of your life?',
+     'time': 2,
+     'timedisplay': '02:00'
+    },
+    {'question': 'Please write out your answer to the following question on the paper provided: Tell me about a time when you’ve hurt someone else\'s feelings.',
+     'time': 2,
+     'timedisplay': '02:00'
+    },
+    {'question': 'Please write out your answer to the following question on the paper provided: What would you do in the event of a zombie apocalypse?',
+     'time': 2,
+     'timedisplay': '02:00'
+    }
 ];
-
-var mental_cleansing_questions = [
-    {'question': 'If you were given a day off on short notice, what would you do?'},
-    {'question': 'What’s your earliest memory?'}
-]
-
-/********* RANDOMLY GENERATE QUESTIONS *********/
-function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}
-
-function shuffleQuestions(){
-    var question_list_shuffled = shuffle(question_list);
-    // add mental cleansing question 1
-    question_list_shuffled.splice(3, 0, mental_cleansing_questions[0]);
-    question_list_shuffled.join();
-    // add mental cleansing question 2
-    question_list_shuffled.splice(7, 0, mental_cleansing_questions[1]);
-    question_list_shuffled.join();
-    return question_list_shuffled;
-}
 
 /********* START STUDY QUESTIONS **********/
 var study_started = false;
@@ -53,14 +31,15 @@ var study_started = false;
 $('#next-start').click(function() {
     $('#start-container').css('display', 'none');
     $('#question-container').css('display', 'inline-block');
-    question_list = shuffleQuestions();
+    // question_list = shuffleQuestions();
     // update the question text to the first one
     $('.question').text(question_list[0]['question']);
+    $('#time').text(question_list[0]['timedisplay']);
     // start recording
     study_started = true;
     startQuestionRecordingHRV();
     startQuestionRecordingEEG();
-    var minutes = 60 * 2, display = $('#time');
+    var minutes = 60 * question_list[0]['time'], display = $('#time');
     startTimer(minutes, display);
 })
 
@@ -71,22 +50,32 @@ function nextQuestion() {
         // TODO: don't let them move forward if they did not answer the question
         // TODO: add 2 min timer before showing next button
         // save the answer to the question
-        saveCurrentAnswer();
+        // saveCurrentAnswer();
         var answer_eeg = createAnswerEEG();
         var answer_hrv = createAnswerHRV();
+        var answer_eda = createAnswerEDA();
         question_list[current]['brainactivity'] = answer_eeg;
         question_list[current]['hrv'] = answer_hrv['hrv'];
+        question_list[current]['eda'] = answer_hrv['eda'];
         current += 1;
         // ALL QUESTIONS ANSWERED move on
+        if (current == 2) {
+            $('#audio-player').css('display', 'block');
+            document.getElementById('music').play();
+        }
+        if (current == 3) {
+            $('#audio-player').css('display', 'none');
+        }
         if (current >= question_list.length) {
             // stop the recording
             study_started = false;
             // TODO: SAVE CSV FILE WITH ALL THE STUFF SO YOU DON'T LOSE IT
-            // GO TO EDIT MODE
-            displayEditMode();
+            // displayEditMode();
             clearInterval(question_timer);
+            finishStudy();
         } else { // go onto next question
             $('#answer-question').text(question_list[current]['question']);
+            $('#time').text(question_list[current]['timedisplay']);
         }
         console.log(question_list);
     } else { // this is the training case
@@ -112,6 +101,15 @@ function createAnswerHRV() {
     return activity;
 }
 
+var question_eda = [];
+function createAnswerEDA() {
+    var activity = {};
+    activity['eda'] = question_eda;
+    // clear the other arrays
+    question_eda = [];
+    return activity;
+}
+
 function saveCurrentAnswer() {
     var answer = $('textarea#question-response').val();
     question_list[current]['answer'] = answer.replace(/\n\r?/g, '<br/>');;
@@ -132,15 +130,20 @@ function startTimer(duration, display) {
         display.text(minutes + ":" + seconds);
 
         if (--timer < 0) {
+            // $('#time').text(question_list[0]['timedisplay']);
+            var audioel = document.getElementById('music');
+            if (!audioel.paused) {
+                audioel.pause();
+            }
             // skip to next question
             nextQuestion();
-            timer = duration;
+            timer = 60 * question_list[1]['time'];
         }
     }, 1000);
 }
 
 /********* EDIT MODE **********/
-function displayEditMode() {
+/*function displayEditMode() {
     $('#question-container').css('display', 'none');
     // instructions and answers
     // TODO add instructions for experimenter to remove muse
@@ -155,15 +158,16 @@ $('#next-survey').click(function() {
     displayGraphs(0);
     // $('#share-eeg').prop('checked', question_list[0]['includeEEG']);
     // $('#share-hrv').prop('checked', question_list[0]['includeHRV'])
-});
+});*/
 
 var current_edit = 0;
 $('#edit-next').click(function() {
     // should go to questionnaire page
-    displaySurvey();
+    // displaySurvey();
+    nextEditQuestion();
 });
 
-$('#edit-next-survey').click(function() {
+/*$('#edit-next-survey').click(function() {
     // should go to the next question
     // save all the survey answers and clear
     var is_all_filled = saveAndClearSurveyResponses(current_edit);
@@ -172,7 +176,7 @@ $('#edit-next-survey').click(function() {
         displayEditModeFromSurvey();
         nextEditQuestion();
     }
-})
+})*/
 
 /* $('#edit-back').click(function() {
     // save the checkbox values before moving backward
@@ -454,16 +458,17 @@ function startQuestionRecordingEEG() {
     socket.on('alpha_relative', function(data) {
     });
     socket.on('beta_relative', function(data) {
-    });
-    socket.on('gamma_relative', function(data) {
-    });
-    socket.on('beta_session', function(data) {
         if (study_started) {
             question_beta.push(data);
         }
-    });}
+    });
+    socket.on('gamma_relative', function(data) {
+    });
+}
 
-
+function startQuestionRecordingEDA() {
+    // TODO RAINA: fill in with eda recording
+}
 
 /********* SUBMISSION **********/
 // TODO ADD CHECK FOR EMPTY VALUES
@@ -509,3 +514,9 @@ $('#submit-final').click(function() {
     $('#final-survey-container').css('display', 'block');
     saveAllToCSV();
 });
+
+function finishStudy() {
+    $('#question-container').css('display', 'none');
+    $('#final-survey-container').css('display', 'block');
+    saveAllToCSV();
+}
