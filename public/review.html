@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Biofeedback</title>
+<!--styles-->
+<link rel="stylesheet" href="css/style.css" type="text/css">
+<link rel="stylesheet" href="css/question-style.css" type="text/css">
+<!--fonts-->
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+<!--scripts-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/Chart.min.js"></script>
+
+</head>
+<body>
+    <!--menus-->
+    <header>
+        <div id="review-menu">
+            <div id="upload-review-csv" class="header-item">
+                <div class="upload-item">
+                    Load File: <input type="file" id="csvreview" />
+                </div>
+            </div>
+            <div id="review-button" class="header-item">
+                <span onclick="readcsv()" class="clickable">Review File</span>
+            </div>
+            <!--<div id="replay-audio-button" class="header-item">
+                <span onclick="replayDataWithAudio()" class="clickable">Replay with Audio</span>
+            </div>
+            <div id="replay-audio" class="header-item">
+                <audio id="replay-audio-player" controls>
+                    <source src="audio/deemo_dream.mp3" type="audio/mpeg">
+                </audio>
+            </div>-->
+        </div>
+    </header>
+    <div id="container">
+        <div id="visualization-container" style="width: 1000px">
+            <div id="viz-buttons" style="display: none">
+                <br/><br/>
+                <span id="prevGraphReview" onclick="prevGraph()" class="clickable" style="display: none">Previous Question</span> <span id="nextGraphReview" onclick="nextGraph()" class="clickable">Next Question</span>
+            </div>
+            <br/><br/>
+            <canvas id="eeg-graph" width="300" height="100"></canvas>
+            <br/><br/>
+            <canvas id="hrv-graph" width="300" height="100"></canvas>
+            <br/><br/>
+            <canvas id="eda-graph" width="300" height="100"></canvas>
+            <br/><br/>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/graph.js"></script>
+    <script src="js/swirling.js"></script>
+    <script src="js/record.js"></script>
+    <script src="js/replay.js"></script>
+    <script src="js/review.js"></script>
+</body>
+</html>
