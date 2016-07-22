@@ -1,5 +1,11 @@
-var question_list = {};
+var question_list = [];
+var baselineq = 'This is a baseline test. Please clear your mind and do not make any sudden movements so that we can record your baseline physiological activity.';
+var audioq = 'Please close your eyes and listen to this audio clip. You may open your eyes when the audio stops playing. You will automatically be moved to the next question afterwards.';
+var memoryq = 'Please share a vivid emotional memory and write out your answer in the word document provided.';
+var paperclipq = 'Please write out all the uses of a paper clip in the word document provided.';
+
 $('#csvreview').change(function(e) {
+    question_list = [];
     var file = e.target.files[0];
     var name = file.name;
     var reader = new FileReader();
@@ -8,46 +14,83 @@ $('#csvreview').change(function(e) {
         var csvarr = e.target.result.split('\n');
         for (var i = 2; i < csvarr.length; i++) {
             var data = csvarr[i].split('|');
-            question_list[i-2] = {};
-            question_list[i-2]['question'] = data[0];
-            console.log(data[3]);
+            var question_info = {};
+            question_info['question'] = data[0];
+            switch (data[0]) {
+                case baselineq:
+                    question_info['color'] = 'rgb(255, 204, 0)';
+                    question_info['label'] = 'baseline';
+                    break;
+                case audioq:
+                    question_info['color'] = 'rgb(204, 51, 255)';
+                    question_info['label'] = 'audio';
+                    break;
+                case memoryq:
+                    question_info['color'] = 'rgb(255, 128, 255)';
+                    question_info['label'] = 'emotion';
+                    break;
+                case paperclipq:
+                    question_info['color'] = 'rgb(51, 204, 51)';
+                    question_info['label'] = 'cognitive';
+                    break;
+                default:
+                    console.log('default');
+                    question_info['color'] = getRandomColor();
+                    question_info['label'] = data[0].split(':')[1];
+                    break;
+            }
             var eeg = data[3].split(',');
             var new_eeg = [];
             for(var j = 0; j < eeg.length; j++) {
                 new_eeg.push(parseFloat(eeg[j]));
             }
-            question_list[i-2]['eeg'] = new_eeg;
+            question_info['eeg'] = new_eeg;
 
             var hrv = data[4].split(',');
             var new_hrv = [];
             for(var j = 0; j < hrv.length; j++) {
                 new_hrv.push(parseFloat(hrv[j]));
             }
-            question_list[i-2]['hrv'] = new_hrv;
-            /*var eda = data[5].split(',');
+            question_info['hrv'] = new_hrv;
+            var eda = data[5].split(',');
             var new_eda = [];
             for(var j = 0; j < eda.length; j++) {
                 new_eda.push(parseFloat(eda[j]));
             }
-            question_list[i-2]['eda'] = new_eda;*/
+            question_info['eda'] = new_eda;
+            question_list.push(question_info);
         }
-        //console.log(csvarr[1]);
-        //console.log('test');
+
     }
     reader.readAsText(file);
 });
 
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
 var current_index = 3;
 function readcsv() {
+    if (eeg_line != null) {
+        eeg_line.destroy();
+        hrv_line.destroy();
+        eda_line.destroy();
+    }
+
     console.log(question_list);
     displayEEGReview(3);
     displayHRVReview(3);
+    displayEDAReview(3);
+
     $('#viz-buttons').css('display', 'block')
 }
 
-
-// 3 (next) 4 (prev, next) 5 (prev)
-function prevGraph() {
+/*function prevGraph() {
     if (current_index == 4) {
         $('#prevGraphReview').css('display', 'none');
     } else if (current_index == 5) {
@@ -58,9 +101,11 @@ function prevGraph() {
 
     eeg_line.destroy();
     hrv_line.destroy();
-    //eda_line.destroy();
+    eda_line.destroy();
+    eda_line.destroy();
     displayEEGReview(current_index);
     displayHRVReview(current_index);
+    displayEDAReview(current_index);
 }
 
 function nextGraph() {
@@ -74,54 +119,32 @@ function nextGraph() {
 
     eeg_line.destroy();
     hrv_line.destroy();
-    // eda_line.destroy();
+    eda_line.destroy();
     displayEEGReview(current_index);
     displayHRVReview(current_index);
-}
+    displayEDAReview(current_index);
+}*/
 
 var eeg_line;
 function displayEEGReview(current_index) {
-    var beta = question_list[current_index]['eeg'];
-    var baseline = question_list[0]['eeg'];
-    var cognitive = question_list[1]['eeg'];
-    var emotional = question_list[2]['eeg'];
-    // console.log(deltaactivity)
     var eeg_labels = [];
-    for (var i = 0; i < beta.length; i++) {
+    for (var i = 0; i < 121; i++) {
         eeg_labels.push(i.toString());
+    }
+    var question_data = [];
+    for (var i = 0; i < question_list.length; i++) {
+        var dataset = {};
+        dataset['label'] = question_list[i]['label'];
+        dataset['fill'] = false;
+        dataset['pointBackgroundColor'] = question_list[i]['color'];
+        dataset['pointRadius'] = 0;
+        dataset['borderColor'] = question_list[i]['color'];
+        dataset['data'] = question_list[i]['eeg'];
+        question_data.push(dataset);
     }
     var eeg_data = {
         labels: eeg_labels,
-        datasets: [
-            {
-                label: 'EEG',
-                fill: false,
-                pointBackgroundColor: 'rgba(75,192,192,1)',
-                borderColor: 'rgba(75,192,192,1)',
-                data: beta
-            },
-            {
-                label: 'Baseline EEG',
-                fill: false,
-                pointBackgroundColor: 'rgb(255, 204, 0)',
-                borderColor: 'rgb(255, 204, 0)',
-                data: baseline
-            },
-            {
-                label: 'Cognitive EEG',
-                fill: false,
-                pointBackgroundColor: 'rgb(51, 204, 51)',
-                borderColor: 'rgb(51, 204, 51)',
-                data: cognitive
-            },
-            {
-                label: 'Emotional EEG',
-                fill: false,
-                pointBackgroundColor: 'rgb(204, 51, 255)',
-                borderColor: 'rgb(204, 51, 255)',
-                data: emotional
-            }
-        ]
+        datasets: question_data
     }
     var ctx = $('#eeg-graph');
     eeg_line = new Chart(ctx, {
@@ -148,46 +171,24 @@ function displayEEGReview(current_index) {
 
 var hrv_line;
 function displayHRVReview(current_index) {
-    var hrv = question_list[current_index]['hrv'];
-    var baseline = question_list[0]['hrv'];
-    var cognitive = question_list[1]['hrv'];
-    var emotional = question_list[2]['hrv'];
     var hrv_labels = [];
-    for (var i = 0; i < hrv.length; i++) {
+    for (var i = 0; i < 121; i++) {
         hrv_labels.push(i.toString());
+    }
+    var question_data = [];
+    for (var i = 0; i < question_list.length; i++) {
+        var dataset = {};
+        dataset['label'] = question_list[i]['label'];
+        dataset['fill'] = false;
+        dataset['pointBackgroundColor'] = question_list[i]['color'];
+        dataset['pointRadius'] = 0;
+        dataset['borderColor'] = question_list[i]['color'];
+        dataset['data'] = question_list[i]['hrv'];
+        question_data.push(dataset);
     }
     var hrv_data = {
         labels: hrv_labels,
-        datasets: [
-            {
-                label: 'HRV',
-                fill: false,
-                pointBackgroundColor: 'rgba(222, 74, 74, 1)',
-                borderColor: 'rgba(222, 74, 74, 1)',
-                data: hrv
-            },
-            {
-                label: 'Baseline HRV',
-                fill: false,
-                pointBackgroundColor: 'rgb(255, 204, 0)',
-                borderColor: 'rgb(255, 204, 0)',
-                data: baseline
-            },
-            {
-                label: 'Cognitive HRV',
-                fill: false,
-                pointBackgroundColor: 'rgb(51, 204, 51)',
-                borderColor: 'rgb(51, 204, 51)',
-                data: cognitive
-            },
-            {
-                label: 'Emotional HRV',
-                fill: false,
-                pointBackgroundColor: 'rgb(204, 51, 255)',
-                borderColor: 'rgb(204, 51, 255)',
-                data: emotional
-            }
-        ]
+        datasets: question_data
     }
     var ctx = $('#hrv-graph');
     hrv_line = new Chart(ctx, {
@@ -214,46 +215,24 @@ function displayHRVReview(current_index) {
 
 var eda_line;
 function displayEDAReview(current_index) {
-    var eda = question_list[current_index]['eda'];
-    var baseline = question_list[0]['eda'];
-    var cognitive = question_list[1]['eda'];
-    var emotional = question_list[2]['eda'];
     var eda_labels = [];
-    for (var i = 0; i < eda.length; i++) {
+    for (var i = 0; i < 121; i++) {
         eda_labels.push(i.toString());
+    }
+    var question_data = [];
+    for (var i = 0; i < question_list.length; i++) {
+        var dataset = {};
+        dataset['label'] = question_list[i]['label'];
+        dataset['fill'] = false;
+        dataset['pointBackgroundColor'] = question_list[i]['color'];
+        dataset['pointRadius'] = 0;
+        dataset['borderColor'] = question_list[i]['color'];
+        dataset['data'] = question_list[i]['eda'];
+        question_data.push(dataset);
     }
     var eda_data = {
         labels: eda_labels,
-        datasets: [
-            {
-                label: 'EDA',
-                fill: false,
-                pointBackgroundColor: 'rgb(255, 102, 0)',
-                borderColor: 'rgb(255, 102, 0)',
-                data: eda
-            },
-            {
-                label: 'Baseline EDA',
-                fill: false,
-                pointBackgroundColor: 'rgb(255, 204, 0)',
-                borderColor: 'rgb(255, 204, 0)',
-                data: baseline
-            },
-            {
-                label: 'Cognitive EDA',
-                fill: false,
-                pointBackgroundColor: 'rgb(51, 204, 51)',
-                borderColor: 'rgb(51, 204, 51)',
-                data: cognitive
-            },
-            {
-                label: 'Emotional EDA',
-                fill: false,
-                pointBackgroundColor: 'rgb(204, 51, 255)',
-                borderColor: 'rgb(204, 51, 255)',
-                data: emotional
-            }
-        ]
+        datasets: question_data
     }
     var ctx = $('#eda-graph');
     eda_line = new Chart(ctx, {
@@ -264,10 +243,10 @@ function displayEDAReview(current_index) {
                 yAxes: [{
                     ticks: {
                         beginAtZero: true,
-                        min: 20,
+                        min: 0,
                         steps: 5,
                         stepValue: 0.2,
-                        max: 120
+                        max: 2
                     }
                 }],
                 xAxes: [{
