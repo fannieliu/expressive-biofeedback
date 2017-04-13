@@ -8,7 +8,7 @@ function connectToMuse() {
     socket.on('muse_connected', function() {
         // TODO: update record for all viz
         startGraphing();
-        startSwirl();
+        // startSwirl();
         $('#muse-status').css('display', 'inline-block');
         $('#connect-message').text('Connected! Now recording.');
     });
@@ -33,8 +33,9 @@ function disconnectFromMuse() {
     socket.emit('disconnectmuse');
 
     socket.on('muse_disconnect', function() {
-        $('#musestatus').text('Muse has been disconnected. Outputting csv files.');
-        $('#headbandstatus').css('display', 'none');
+        console.log('disconnected');
+        $('#connect-message').text('Muse has been disconnected.');
+        $('#muse-status').css('display', 'none');
     });
 }
 

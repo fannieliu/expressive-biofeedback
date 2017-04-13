@@ -52,13 +52,14 @@ var seconds = ((new Date().getTime() / 1000)%10)*100;
 
 // CanvasSwirl 0.8 by Andrew Stibbard: http://xhva.net  http://jsswirl.com
 function doSwirling() {
-    myconfig.count = 0;
+    // my_config.count = 0;
+    var conf = getSwirlConfig();
     swirl1 = new CanvasSwirl(
-        document.getElementById('swirl1_surface'), my_config
+        document.getElementById('swirl1_surface'), conf
     );
     setInterval(function() {
-        updateSwirl(my_config, delta, theta, alpha, beta, gamma);
-        swirl1.applyConfig(my_config);
+        updateSwirl(conf, delta, theta, alpha, beta, gamma);
+        swirl1.applyConfig(conf);
     }, 1000);
 };
 

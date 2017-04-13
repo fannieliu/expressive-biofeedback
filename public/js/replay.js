@@ -78,7 +78,7 @@ function startReplayViz() {
     }
 
     //sliders config
-    var delta_slide = 
+    var delta_slide =
       d3.select("#delta-slide").select("svg").append("svg")
         .attr("x", deltaarr_replay[0])
         .attr("width", 195)
@@ -95,7 +95,7 @@ function startReplayViz() {
       .style("font-size", "68")
       .text("\u03b4");
 
-    var alpha_slide = 
+    var alpha_slide =
       d3.select("#alpha-slide").select("svg").append("svg")
         .attr("x",alphaarr_replay[0])
         .attr("width", 195)
@@ -111,8 +111,8 @@ function startReplayViz() {
       .style("fill", "white")
       .style("font-size", "68")
       .text("\u03b1");
-                    
-    var beta_slide = 
+
+    var beta_slide =
       d3.select("#beta-slide").select("svg").append("svg")
         .attr("x",betaarr_replay[0])
         .attr("width", 195)
@@ -149,7 +149,7 @@ function startReplayViz() {
             replaySwirl(swirl, delta_float, theta_float, alpha_float, beta_float, gamma_float);
             replayColors(delta_float+shift, theta_float+shift, alpha_float+shift, beta_float+shift, gamma_float+shift);
             replaySliders(delta_slide, alpha_slide, beta_slide, delta_float, theta_float, alpha_float, beta_float, gamma_float);
-            // replayLight(index);
+            replayLight(index);
         }
         index++;
     }, 1000);

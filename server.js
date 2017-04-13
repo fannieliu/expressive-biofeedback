@@ -46,11 +46,14 @@ var gammaabs = [];
 var concentration = [];
 var mellow = [];
 
+var port_opened = false;
+var connected = false;
+
 io.on('connection', function(socket) {
     console.log('connected');
 
     // serial listener stuff for lights
-    /*socket.on('openport', function() {
+    socket.on('openport', function() {
         serialListener();
     });
     socket.on('closeport', function() {
@@ -58,8 +61,9 @@ io.on('connection', function(socket) {
     });
 
     socket.on('writeserial', function(data) {
+        console.log('writing ' + data);
         serialPort.write(data + 'E');
-    });*/
+    });
 
     socket.on('connectmuse', function() {
         // send fake data
@@ -89,6 +93,7 @@ io.on('connection', function(socket) {
         var muse = nodeMuse.connect().Muse;
 
         muse.on('connected', function() {
+            connected = true;
             socket.emit('muse_connected');
         });
 
@@ -101,6 +106,41 @@ io.on('connection', function(socket) {
         muse.on('disconnected', function() {
             socket.emit('muse_unintended_disconnect');
         });
+
+        // LED LIGHT CURRENT MAX
+        setInterval(function(){
+            if (deltaarr_sec.length > 0 && connected) {
+                if (!port_opened) {
+                    serialListener();
+                }
+                var delta_float = deltaarr_sec[deltaarr_sec.length-1][0]
+                var alpha_float = alphaarr_sec[alphaarr_sec.length-1][0]
+                var beta_float = betaarr_sec[betaarr_sec.length-1][0]
+
+                var sendData = 'd';
+                var max = delta_float;
+                /*if (theta_float > max) {
+                    max = theta_float;
+                    sendData = 't';
+                }*/
+                if (alpha_float > max) {
+                    max = alpha_float;
+                    sendData = 'a';
+                }
+                if (beta_float > max) {
+                    max = beta_float;
+                    sendData = 'b';
+                }
+                /*if (gamma_float > max) {
+                    max = gamma_float;
+                    sendData = 'g'
+                }*/
+                if (port_opened) {
+                    serialPort.write(sendData + 'E');
+                }
+                // socket.emit('writeserial', sendData);
+            }
+        }, 1000);
 
         // only send once every second
         var deltanow = Date.now();
@@ -136,7 +176,7 @@ io.on('connection', function(socket) {
             if (checkTime(thetanow, thetalast)) {
                 thetalast = thetanow;
                 thetaarr_sec.push([thetadata]);
-                socket.emit('theta_relative', averageChannelData(data));
+                socket.emit('theta_relative', thetadata);
             }
         });
 
@@ -147,7 +187,7 @@ io.on('connection', function(socket) {
             if (checkTime(alphanow, alphalast)) {
                 alphalast = alphanow;
                 alphaarr_sec.push([alphadata]);
-                socket.emit('alpha_relative', averageChannelData(data));
+                socket.emit('alpha_relative', alphadata);
             }
         });
 
@@ -158,7 +198,7 @@ io.on('connection', function(socket) {
             if (checkTime(betanow, betalast)) {
                 betalast = betanow;
                 betaarr_sec.push([betadata]);
-                socket.emit('beta_relative', averageChannelData(data));
+                socket.emit('beta_relative', betadata);
             }
         });
 
@@ -246,11 +286,13 @@ io.on('connection', function(socket) {
     });
 
     socket.on('disconnectmuse', function() {
-        nodeMuse.disconnect();
+        connected = false;
+        serialPort.close();
         socket.emit('muse_disconnect');
+        nodeMuse.disconnect();
 
         // save all data to csv file
-        downloadData(deltaarr, 'delta');
+        /*downloadData(deltaarr, 'delta');
         downloadData(thetaarr, 'theta');
         downloadData(alphaarr, 'alpha');
         downloadData(betaarr, 'beta');
@@ -275,7 +317,7 @@ io.on('connection', function(socket) {
         downloadData(betaabs, 'beta_absolute');
         downloadData(gammaabs, 'gamma_absolute');
         downloadData(concentration, 'concentration');
-        downloadData(mellow, 'mellow');
+        downloadData(mellow, 'mellow'); */
     });
 });
 
@@ -362,7 +404,7 @@ function downloadData(data, filename) {
 }
 
 function serialListener() {
-    serialPort = new SerialPort('/dev/cu.usbmodem1421', {
+    serialPort = new SerialPort('/dev/cu.usbmodem1411', {
         baudrate: 9600,
         // defaults for Arduino serial communication
         dataBits: 8,
@@ -372,7 +414,8 @@ function serialListener() {
     });
 
     serialPort.on('open', function () {
-      console.log('open serial communication');
+        port_opened = true;
+        console.log('open serial communication');
     });
 }
 
